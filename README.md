@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 # admin-front
 
 ## Project setup
@@ -18,6 +19,9 @@ npm run build
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+=======
+# injury
+>>>>>>> 15216ca (Initial commit)
 =======
 # injury
 >>>>>>> 15216ca (Initial commit)
