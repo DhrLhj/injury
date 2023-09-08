@@ -1,0 +1,12 @@
+__pycache__
+.ipynb_checkpoints
+*/__pycache__
+*/.ipynb_checkpoints
+bk/
+*.mp4
+*/*.mp4
+test/
+# ignore videos files but the folder
+data/videos/*
+!data/video/.gitkeep
+
