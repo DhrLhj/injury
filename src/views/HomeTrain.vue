@@ -336,20 +336,24 @@ export default {
     uploadFile() {
       const fileInput = event.target;
       // 检查是否选择了文件
-      if (fileInput.files.length === 0) {
-        alert('请先选择一个文件');
-        return;
-      }
+      if (fileInput.files[0] === "") {
+        this.images.push(require('@/assets/rightimagebox/1.jpg'));
+      }else{
       // 获取选择的文件
       const file = fileInput.files[0];
       // 检查文件类型
       const fileURL = URL.createObjectURL(file);
       this.images.push(fileURL);
       fileInput.value = '';
+      }
     },
 
     clickbutton(bu_id){
       router.push(this.projectList[this.selectedImageIndex][bu_id] );
+    },
+
+    clickbutton1(bu_id){
+      router.push(this.projectList[bu_id][0] );
     }
 
   },
@@ -407,6 +411,10 @@ export default {
         this.clickbutton(1);
       } else if (message.includes('0121')) {//方案选择3
         this.clickbutton(2);
+      } else if (message.includes('0121')) {//2方案选择1
+        this.clickbutton1(4);
+      } else if (message.includes('0121')) {//3方案选择1
+        this.clickbutton1(5);
       }
       
     }
