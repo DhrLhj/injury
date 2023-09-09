@@ -1,0 +1,38 @@
+{
+  "name": "admin-front",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build"
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "^2.1.0",
+    "axios": "^1.4.0",
+    "core-js": "^3.8.3",
+    "crypto-js": "^4.1.1",
+    "element-plus": "^2.3.9",
+    "less-loader": "^7.3.0",
+    "relation-graph": "^2.0.27",
+    "socket.io-client": "^4.7.2",
+    "v-viewer": "^1.6.4",
+    "video.js": "^7.1.0",
+    "videojs-contrib-hls": "^5.15.0",
+    "videojs-flash": "^2.2.1",
+    "viewerjs": "^1.11.5",
+    "vue": "^3.2.13",
+    "vue-router": "^4.0.0",
+    "vue-web-cam": "^1.9.0",
+    "vuex": "^4.0.0",
+    "websocket": "^1.0.34"
+  },
+  "devDependencies": {
+    "@vue/cli-plugin-babel": "~5.0.0",
+    "@vue/cli-plugin-router": "~5.0.0",
+    "@vue/cli-plugin-vuex": "~5.0.0",
+    "@vue/cli-service": "~5.0.0",
+    "less": "^3.9.0",
+    "sass": "^1.32.7",
+    "sass-loader": "^12.0.0"
+  }
+}
