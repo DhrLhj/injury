@@ -22,11 +22,11 @@ const routes = [
       { path:'/body',name:'body',component:()=>import('../views/body.vue')},
     ]
   },
-  { path:'/study',
-    name:'Study',
-    component:()=>import('../views/Study.vue'),
+  { path:'/studyNew',
+    name:'studyNew',
+    component:()=>import('../views/StudyNew.vue'),
     children:[
-    { path:'/study/right/detail',name:'RightDetail',component:()=>import('../views/StudyVideo/RightDetail.vue')},
+    { path:'/studyNew/right/detail',name:'RightDetail',component:()=>import('../views/StudyVideo/RightDetail.vue')},
     { path:'/study/right/1',name:'RightVideoOne',component:()=>import('../views/StudyVideo/RightVideoOne.vue')},
     { path:'/study/right/2',name:'RightVideoTwo',component:()=>import('../views/StudyVideo/RightVideoTwo.vue')},
     { path:'/study/right/3',name:'RightVideoThree',component:()=>import('../views/StudyVideo/RightVideoThree.vue')},
@@ -53,25 +53,7 @@ const routes = [
     { path:'/detail',name:'Detail',component:()=>import('../views//StudyPhoto/Detail.vue')},
   ]
   },
-  { path:'/personal',
-    name:'Personal',
-    component:()=>import('../views/Personal.vue'),
-    children:[
-      { path:'/information',name:'Information',component:()=>import('../views/Information.vue')},
-      { path:'/trainingResults',name:'TrainingResults',component:()=>import('../views/TrainingResults.vue')},
-      { path:'/studySchedule',name:'StudySchedule',component:()=>import('../views/StudySchedule.vue')},
  
-    ]
-  },
-  
-  {
-    path: '/left',
-    name: 'left',
-    component: () => import( '../views/Left.vue'),
-    children:[
-      // { path:'/home',name:'Home',component:()=>import('../views/Home.vue')},
-  ]
-},
 {
   path:"/webscam",
   name:'webscam',

@@ -13,7 +13,7 @@
 
 <script>
 import Header from '@/components/Header.vue';
-import Study from '@/views/Study.vue';
+import Study from '@/views/StudyNew.vue';
 import Left from '@/views/Left.vue';
 
 // import Home from '@/views/Home.vue';

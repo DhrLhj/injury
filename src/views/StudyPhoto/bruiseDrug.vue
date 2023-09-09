@@ -8,7 +8,7 @@
                 <el-divider style="margin: 0;border-width: 3px;border-color: black;" direction="vertical" />
                 <span style="margin-left: 0.5%;">照片</span>
                 </div>
-                <div style="width: 100%;height: 88%;">
+                <div style="width: 90%;height: 90%;">
                     <div style="height:100%">
                     <img :src="require('@/assets/imagebox/bruise/2.jpg')" class="carousel-image" alt="" style="height:100%;width:100%"> </div></div>
     
@@ -38,7 +38,7 @@
                     <span style="margin-left: 0.5%;">救治操作视频</span>
                 </div>
                     
-            <div style="width: 100%;height:20%;margin-top: 1%;">
+                <div style="width: 100%;height:100%;margin-top: 1%;">
                 <video ref="videoPlayer" poster="@/assets/imagebox/videoPhoto.jpg" controls style="width: 100%;height: 80%;">
                     <source :src="videourl" type="video/mp4">
                 </video>
