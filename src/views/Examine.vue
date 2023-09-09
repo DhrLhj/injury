@@ -34,26 +34,40 @@ export default {
         }
     },
     methods: {
-        hh() {
-            router.push("/ExamineInner");
-        
-    },
-    },
-    created() 
-    {
-        this.$ws.addEventListener('message', (event) => {
-        // 处理 WebSocket 消息
-        const message = event.data;
-        console.log('WebSocket消息：', message);
-        
-        if (message === 'hh') {
-            this.hh();
+        hh(){
+          router.push("/ExamineInner")
+        },
+        ii(){
+          router.push("/Teaching")
         }
-        })
-        
+
 
     },
-    mounted() {
+
+    created() {
+
+      this.handleWebSocketMessage = (event) => {
+        const message = event.data;
+        if (message !== "-1") {
+          console.log('WebSocket消息：', message);
+          this.textmessage = 'WebSocket消息：' + message;
+
+          if (message === '0521') { //进入考核
+            this.hh();
+          } else if (message.includes('07')) { //返回
+            this.ii();
+          }
+        }};
+
+        this.$ws.addEventListener('message', this.handleWebSocketMessage);
+
+
+    },
+      mounted() {
+    },
+      beforeDestroy() {
+      console.log("退出home")
+      this.$ws.removeEventListener('message', this.handleWebSocketMessage);
     }
 
 }

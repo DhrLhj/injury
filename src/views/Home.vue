@@ -140,10 +140,9 @@ export default {
     },
     mounted() {
     },
-    beforeUnmount() {
+    beforeDestroy() {
       console.log("退出home")
       this.$ws.removeEventListener('message', this.handleWebSocketMessage);
-      //this.$ws.close()
     }
 
 }
