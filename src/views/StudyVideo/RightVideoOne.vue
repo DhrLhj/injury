@@ -65,10 +65,24 @@ export default {
     }
   },
   methods:{
-    toggleFullScreen(){
-      const videoPlayer = this.$refs.videoPlayer;
-      videoPlayer.requestFullscreen();
-    },
+    toggleFullScreen() {
+  const videoPlayer = this.$refs.videoPlayer;
+
+  // 检查浏览器是否支持全屏功能
+  if (document.fullscreenEnabled) {
+    // 如果不在全屏状态下，请求全屏权限
+    if (!document.fullscreenElement) {
+      videoPlayer.requestFullscreen().catch((error) => {
+        console.error('请求全屏权限失败：', error);
+      });
+    } else {
+      // 如果已经在全屏状态下，退出全屏
+      this.toExitFullscreen();
+    }
+  } else {
+    console.error('浏览器不支持全屏功能');
+  }
+},
     toExitFullscreen() {
       if (document.fullscreenElement) {
         // 如果当前处于全屏状态，则退出全屏
@@ -84,12 +98,12 @@ export default {
       // 处理 WebSocket 消息
       const message = event.data;
       if (message !== "-1"){
-        console.log('WebSocket消息：', message);
-        if (message === '0620') {//全屏
-          this.toggleFullScreen()
-        } else if (message === '1125') {//退出全屏
-          this.toExitFullscreen();
-        }
+        // console.log('WebSocket消息：', message);
+        // if (message === '25') {//全屏
+        //   this.toggleFullScreen()
+        // } else if (message === '19') {//退出全屏
+        //   this.toExitFullscreen();
+        // }
 
       }
 

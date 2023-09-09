@@ -219,7 +219,8 @@ export default {
       this.clickBox(this.boxId);
     },
     clickBox(boxId) {
-      const box1 = document.getElementById('box1');
+      if (this.isPictrue) {
+        const box1 = document.getElementById('box1');
       const box2 = document.getElementById('box2');
       const box3 = document.getElementById('box3');
       box1.style.backgroundColor = '#FFFFFF';
@@ -232,6 +233,8 @@ export default {
       } else if (boxId === 3) {
         box3.style.backgroundColor = '#99a9bf';
       }
+      }
+      
     },
 
     initCamera() {
@@ -334,18 +337,18 @@ export default {
     },
 
     uploadFile() {
-      const fileInput = event.target;
-      // 检查是否选择了文件
-      if (fileInput.files[0] === "") {
+      // const fileInput = event.target;
+      // // 检查是否选择了文件
+      // if (fileInput.files[0] === "") {
         this.images.push(require('@/assets/rightimagebox/1.jpg'));
-      }else{
-      // 获取选择的文件
-      const file = fileInput.files[0];
-      // 检查文件类型
-      const fileURL = URL.createObjectURL(file);
-      this.images.push(fileURL);
-      fileInput.value = '';
-      }
+      // }else{
+      // // 获取选择的文件
+      // const file = fileInput.files[0];
+      // // 检查文件类型
+      // const fileURL = URL.createObjectURL(file);
+      // this.images.push(fileURL);
+      // fileInput.value = '';
+      // }
     },
 
     clickbutton(bu_id){
@@ -379,7 +382,7 @@ export default {
         this.sendPhoto()
       } else if (message === '0114') {//取消拍摄
         this.jijiu();
-      } else if (message.includes('19')) {//载入
+      } else if (message.includes('18')) {//载入
         this.uploadFile();
       } else if (message === '30') {//图片选择下滑
         this.selectedImageIndex += 1
@@ -393,13 +396,13 @@ export default {
           this.selectedImageIndex = this.images.length - 1
         }
         this.selectImage(this.selectedImageIndex);
-      } else if (message.includes('26')) {//方案选择下滑
+      } else if (message.includes('15')) {//方案选择下滑
         this.boxId += 1
         if (this.boxId < 1) {
           this.boxId = 1
         }
         this.clickBox(this.boxId);
-      } else if (message.includes('28')) {//方案选择上滑
+      } else if (message.includes('26')) {//方案选择上滑
         this.boxId -= 1
         if (this.boxId > 3) {
           this.boxId = 3
@@ -411,10 +414,12 @@ export default {
         this.clickbutton(1);
       } else if (message.includes('0121')) {//方案选择3
         this.clickbutton(2);
-      } else if (message.includes('0121')) {//2方案选择1
+      } else if (message.includes('0615')) {//2方案选择1
         this.clickbutton1(4);
-      } else if (message.includes('0121')) {//3方案选择1
+      } else if (message.includes('0715')) {//3方案选择1
         this.clickbutton1(5);
+      } else if (message.includes('22')) {//语音播放
+        this.speakText();
       }
       
     }

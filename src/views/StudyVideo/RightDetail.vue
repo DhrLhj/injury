@@ -77,9 +77,12 @@ export default {
     // }, 6000)
   },
   created() {
+    let self = this
     this.handleWebSocketMessage=(event)=> {
       // 处理 WebSocket 消息
       const message = event.data;
+      
+
       if (message !== "-1"){
       console.log('WebSocket消息：', message);
       if (message.includes('30')) {//方案选择下滑
@@ -106,7 +109,7 @@ export default {
       } else if (message.includes('36')) {//方案选择右下滑
         self.handleChooseNode('4')
         self.handleNotification()
-      } else if (message.includes('36')) {//方案选择
+      } else if (message.includes('19')) {//方案选择 手势7
         self.onNodeClick(this.currentChooseNodeId)
       }
     }
@@ -506,31 +509,9 @@ export default {
         router.push("/study/right/explosionDrug");
       }
 
-    }
-
-
     },
-    // 展示当前选中的线
-    onLineClick(lineObject, $event) {
-      console.log('onLineClick:', lineObject)
-    },
-    // 处理点击节点事件
-    handleClickNode(eventId) {
-      let currentNode = this.$refs.seeksRelationGraph.getNodeById(this.currentChooseNodeId) // 选择当前节点
-      // todo 执行接下来要做的事情
-        
-    },
-    // 处理弹窗事件
-    handleNotification(eventId) {
-      // todo 使用element-plus的弹窗，内部内容根据需要修改
-      ElNotification({
-        title: 'Title',
-        message: h('i', {style: 'color: teal'}, 'This is a reminder'),
-        duration: 20000 // 弹窗持续时间20s
-      })
-    },
-    // 处理根据手势缩放事件
-    handleZoomGraph(eventId) {
+        // 处理根据手势缩放事件
+        handleZoomGraph(eventId) {
       // 获取要模拟滚动的元素
       let elements = document.querySelectorAll('span.c-mb-text');
 
@@ -601,6 +582,31 @@ export default {
       }
       this.$refs.seeksRelationGraph.focusNodeById(this.currentChooseNodeId)
     },
+
+
+// 展示当前选中的线
+onLineClick(lineObject, $event) {
+      console.log('onLineClick:', lineObject)
+    },
+    // 处理点击节点事件
+    handleClickNode(eventId) {
+      let currentNode = this.$refs.seeksRelationGraph.getNodeById(this.currentChooseNodeId) // 选择当前节点
+      // todo 执行接下来要做的事情
+        
+    },
+    // 处理弹窗事件
+    handleNotification(eventId) {
+      // todo 使用element-plus的弹窗，内部内容根据需要修改
+      ElNotification({
+        title: 'Title',
+        message: h('i', {style: 'color: teal'}, 'This is a reminder'),
+        duration: 20000 // 弹窗持续时间20s
+      })
+    },
+
+    },
+    
+
   }
 
 </script>

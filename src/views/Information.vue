@@ -52,17 +52,7 @@ export default {
     },
     created() 
     {
-        // setTimeout(() => {
-        this.$ws.addEventListener('message', (event) => {
-        // 处理 WebSocket 消息
-        const message = event.data;
-        console.log('WebSocket消息：', message);
         
-        if (message==='1') {
-                this.handlenext(); 
-            }
-        })
-        // }, 3000);  
         
 
     },

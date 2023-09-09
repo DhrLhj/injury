@@ -51,18 +51,9 @@ const WebSocketPlugin = {
         flag = true
         ws.send("start recognization");
 
-        // if (e.data==='1'){
-        //     console.log("进入第一题")
-        //     const hash = window.location.hash;
-            
-        //     console.log(hash)
-        //     if(hash.includes('Teaching')){
-        //         router.push("/study/right/1")
-        //     }
-        //     // else if(hash.includes('study/right')){
-        //     //     document.querySelector("#index1").click()
-        //     // }
-        // }else if(e.data==='2'){
+        if (e.data.includes('02')){
+            router.push("/study/right/1")
+        }
         //     console.log("进入第二题")
         //     const hash = window.location.hash;
         
