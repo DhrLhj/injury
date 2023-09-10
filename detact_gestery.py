@@ -161,8 +161,8 @@ class GestureRecognition:
         self.left_queue = FixedSizeQueue(60)
         self.right_queue = FixedSizeQueue(60)
         self.time_gap=25
-        self.non_gester=1
-        self.catch_gester=0
+        self.non_gester=23
+        self.catch_gester=1
         self.previous_land_mark=None
         self.current_land_mark=None
         self.threshold=0.2
@@ -177,7 +177,7 @@ class GestureRecognition:
         self.mouse_queue = FixedSizeQueue(10)
         self.mouse_move_temp = np.zeros(3,)
         self.ema_mouse = 0.0
-        self.lookup = GestureLookup(r'map.xlsx')
+        self.lookup = GestureLookup(r'mlp.xlsx')
 
     def _mouse_move(self, image):
         results = self.pose.process(image)
@@ -302,7 +302,8 @@ class GestureRecognition:
                         # print('landmarks:', landmarks[0])
 
 
-                        if hand_sign_id == self.catch_gester & self.catch_flag:
+                        if (hand_sign_id == self.catch_gester) and self.catch_flag:
+                            print("hand_sign_id",hand_sign_id)
                             # self._mouse_move()
                             if self.frame % 2 == 0:
                                 arr_landmarks = np.array([[ld.x, ld.y, ld.z] for ld in landmarks.landmark])
@@ -349,6 +350,7 @@ class GestureRecognition:
                                 break
                         if self.move_flag:
                             print("进入动态")
+                        self.move_flag=0
                     elif two_hand_result[1]==self.catch_gester:
                         res=list(self.result_queue.queue)
                         self.catch_flag=1
@@ -362,9 +364,9 @@ class GestureRecognition:
                         result_hand_sign_id=encode(left_hand_id,right_hand_id)
                         print(self.frame,'Left:', left_hand, 'Right:', right_hand)
                         print(result_hand_sign_id)
-                        # key=self.lookup.get_gesture_by_id(result_hand_sign_id)
-                        # print("key",key)
-                        # press_keys_from_string(key)
+                        key=self.lookup.get_gesture_by_id(result_hand_sign_id)
+                        print("key",key)
+                        press_keys_from_string(key)
             else:
                 pass
         if self.move_flag:
@@ -383,7 +385,7 @@ class GestureRecognition:
 
 if __name__=='__main__':
     gesture_detector = GestureRecognition()
-    cap = cv.VideoCapture(0)
+    cap = cv.VideoCapture(1)
     mode = 0
     number = -1
     while True:

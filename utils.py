@@ -77,7 +77,6 @@ def press_keys_from_string(s: str):
     if s in key_list:
         pyautogui.press(s)  # 模拟按下F5键
         return
-    print("这是",s)
     
     s=[z for z in s if z !=' ']
     if s!=[]:
