@@ -70,7 +70,7 @@ def press_keys_from_string(s: str):
         pyautogui.press(s)  # 模拟按下F5键
         return
     s=[tem for tem in s if tem !=' ']
-    if s!=[]
+    if s!=[]:
         pyautogui.keyDown('ctrl')
         for char in s:
             pyautogui.keyDown(char)
