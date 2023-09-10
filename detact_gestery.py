@@ -14,6 +14,7 @@ from models.dtw import dtw
 from models.modules import coord_norm,distance,vDistance,plotgesture,vDistance2
 from gester_encoder import *
 import math
+from util.wincontrol import mouse_move
 
 
 class TransformerModel(nn.Module):
@@ -171,6 +172,34 @@ class GestureRecognition:
         self.template_dynamic_gesture = get_templates(r"gesture_template\0908")[1]
         # self.image_holder = FixedSizeQueue(30)
         self.pose_queue = FixedSizeQueue(20)
+        self.mouse_queue = FixedSizeQueue(10)
+
+    def _mouse_move(self, image):
+        results = self.pose.process(image)
+        if results is None:
+            return None
+        if results.pose_landmarks is  None:
+            return None
+        # drawing keypoints
+        mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS)
+        # results parsing
+        frame_pose_coords = get_pose_coords(results)
+        if frame_pose_coords is None:
+            # print('WARNING: 动态手势未检测到足够多的关键点\n'
+            #       '请确保手、肩、胯在视野内！')
+            # time.sleep(1)
+            return None
+        if self.frame % 4 == 0:
+            self.mouse_queue.push(frame_pose_coords)
+        if self.mouse_queue.full(): 
+            if self.frame % 10 != 0:
+                return None
+            arr_poses = np.array(self.pose_queue.get_all()).reshape(-1,6,3)
+            # 最后一帧和前一帧的相对位移，
+            delta = arr_poses[-1,:2,:2] - arr_poses[0,:2,:2]
+            print('mouse move: {delta}')
+            mouse_move(*delta.tolist())
+
 
     def _dynamic_gesture(self,image) -> int:
         # pose estimation
