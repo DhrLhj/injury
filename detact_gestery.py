@@ -17,7 +17,7 @@ from models.modules import coord_norm,distance,vDistance,plotgesture,vDistance2
 mp_drawing = mp.solutions.drawing_utils
 mp_pose = mp.solutions.pose
 
-name=['one','five','fist','ok','seven','two','three','four','six','I love you','eight','thumb up','nine','pink']
+name = ['one', 'five', 'fist', 'ok', 'seven', 'two', 'three', 'four', 'six', 'I love you','eight','thumb up','nine','pink']
 
 
 def get_pose_coords(results):
@@ -27,27 +27,66 @@ def get_pose_coords(results):
         row = []
         for id in specified_landmarks:
             landmark = results.pose_landmarks.landmark[id]
-            x, y, z = landmark.x ,landmark.y ,landmark.z
-            row.extend([x, y,z])
+            x, y, z = landmark.x, landmark.y, landmark.z
+            row.extend([x, y, z])
     return row
 
 
-
-
 def cal_dtw(dict_coord_hands, arr_temp):
+    arr_poses = dict_coord_hands['arr_poses'].copy()
+    arr_coord_hands = dict_coord_hands['arr_pose_norm'].copy()
     ar_coords = dict_coord_hands['arr_pose_diff'].copy()
+    # 判断是否移动了: 左手或者右手移动半个身位
+    res1 = np.sqrt(((arr_coord_hands[-1,:,:] - arr_coord_hands[0,:,:])**2).sum(axis=1))
+    res2 = np.sqrt(((arr_poses[-1,:,:] - arr_poses[0,:,:])**2).sum(axis=1))
+    GESTURE_MIN_THRESHOLD = 0.7
+    COORDS_MIN_THRESHOLD = 0.0
+    norm_flag = sum([1 if a >= GESTURE_MIN_THRESHOLD else 0 for a in res1])
+    distance_flag = sum([1 if a >= COORDS_MIN_THRESHOLD else 0 for a in res2])
+    if (distance_flag & norm_flag) == 0:
+        return None
+    # print(f'move flag: {res1}')
     bm = np.array([1]*10)
     list_dtw = []
     for t in range(arr_temp.shape[0]):
-#         print(ar_coords.shape,arr_temp.shape)
+        # print(ar_coords.shape,arr_temp.shape)
         res,_,_,_ = dtw(ar_coords[:,:,:2],arr_temp[t][:,:,:2],vDistance2,w=4)
         list_dtw.append(res)
-
     arr_dtw = np.array(list_dtw)
     arr_res = bm[:arr_temp.shape[0]]*arr_dtw
-#     arr_res = arr_dtw
+    # arr_res = arr_dtw
     minIndex = np.argmin(arr_res)
-    # minRes = arr_res[minIndex]
+    minRes = arr_res[minIndex]
+    print(f"minIndex:#{minIndex} minRes={minRes}")
+    if minRes > 1.5:
+        if minIndex > 7:
+            print('xxxxxxForxxxxxMinResxxxxxxxxxxxxxx')
+        return None
+    # =========================================================================
+    # 对动作进行约束：
+    # 分别对左手右手的横纵坐标进行限制，看哪些手势需要满足这些条件
+    #
+    # 注意这里的arr_coord_norm是左右手规范化的坐标
+    # 其原点为各自肩部位置， 单位长度为肩部到胯部的距离
+    # ========================================================================
+    return minIndex
+    print(f"#{minIndex} --{arr_coord_hands[-1]}")
+    # *右手左右小范围移动，(-0.3, 0.3)*
+    if -0.3 < arr_coord_hands[-1, 1, 0] < 0.3:  # 右手的横坐标不超过0.5;
+        if gesture_id not in [0, 1, 4, 5, 6, 7, 9]:  # 限定右手横坐标
+            return None
+    # *右手上下小范围移动，(-0.2, 0.2)*
+    # if -0.2 < arr_coord_hands[-1, 1, 1] < 0.2:  # 右手的横坐标不超过0.5;
+    #     if gesture_id not in [2, 3, 4, 5, 6, 7, ]:  # 限定右手横坐标
+    #         return None
+    # *左手左右小范围移动，(-0.3, 0.3)*
+    if -0.3 < arr_coord_hands[-1, 0, 0] < 0.3:  # 右手的横坐标不超过0.5;
+        if gesture_id not in [0, 1, 2, 3, 9]:  # 限定右手横坐标
+            return None
+    # *左手上下小范围移动，(-0.2, 0.2)*
+    # if -0.2 < arr_coord_hands[-1, 0, 1] < 0.2:  # 右手的横坐标不超过0.5;
+    #     if gesture_id not in [0, 1, 2, 3]:  # 限定右手横坐标
+    #         return None
     return minIndex
 
 
@@ -81,36 +120,47 @@ class GestureRecognition:
         self.frame=-1
         self.left_queue = FixedSizeQueue(60)
         self.right_queue = FixedSizeQueue(60)
-        self.time_gap=20
+        self.time_gap=15
         self.non_gester=1
         self.previous_land_mark=None
         self.current_land_mark=None
         self.threshold=0.2
         self.result_queue=FixedSizeQueue(3)
         self.result_queue.push([-1,-1])
-        self.move_flag=1
+        self.move_flag=0
         # todo: template
         self.template_dynamic_gesture = get_templates("gesture_template/0907_01")[1]
         # self.image_holder = FixedSizeQueue(30)
-        self.pose_queue = FixedSizeQueue(30)
+        self.pose_queue = FixedSizeQueue(20)
 
-    def _dynamic_gesture(self,image) -> int:
+    def _dynamic_gesture(self, image) -> int:
         # pose estimation
+        time_start = time.time()
         results = self.pose.process(image)
         if results is None:
+            return None
+        if results.pose_landmarks is  None:
             return None
         # drawing keypoints
         mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS)
         # results parsing
         frame_pose_coords = get_pose_coords(results)
-        if frame_pose_coords is not None:
+        if frame_pose_coords is None:
+            # print('WARNING: 动态手势未检测到足够多的关键点\n'
+            #       '请确保手、肩、胯在视野内！')
+            # time.sleep(1)
+            return None
+        if self.frame % 4 == 0:
             self.pose_queue.push(frame_pose_coords)
-        if self.pose_queue.full():
-            # print('full')
+        # print(f'len:{len(self.pose_queue)}')
+        if self.pose_queue.full(): 
+            if self.frame % 40 != 0:
+                self.move_flag = 1
+                return None
             arr_poses = np.array(self.pose_queue.get_all()).reshape(-1,6,3)
             # arr_coord_hands = norm_pose(arr_poses)
             arr_coord_hands = np.array(list(map(norm_pose, arr_poses)))
-            arr_coord_diff = arr_coord_hands[1:] - arr_coord_hands[:-1]
+            arr_coord_diff = arr_poses[1:, :2, :] - arr_poses[:-1, :2, :]
             dict_coord_hands = {
                 "arr_poses": arr_poses,
                 "arr_pose_norm": arr_coord_hands,
@@ -118,7 +168,12 @@ class GestureRecognition:
             }
             # calculate the gesture
             gesture_id = cal_dtw(dict_coord_hands, self.template_dynamic_gesture)
-            print(f"动态手势：{gesture_id}")
+            if gesture_id is None:
+                return None
+            time_used = round(time.time() - time_start,2)
+            print(f"动态手势：{gesture_id}, 用时: {time_used}秒")
+            self.move_flag=0
+            # time.sleep(1)
             return gesture_id
         return None
 
@@ -128,7 +183,8 @@ class GestureRecognition:
         hand_sign_id = 0
         ############Detection implementation #############################################################
         image.flags.writeable = False
-        if not self.move_flag:
+        # if not self.move_flag:
+        if False:
             results = self.hands.process(image)
             image.flags.writeable = True
             #####################################################################
@@ -159,30 +215,34 @@ class GestureRecognition:
                     left_hand = name[two_hand_result[0]] if two_hand_result[0] is not None else "Unknown"
                     right_hand = name[two_hand_result[1]] if two_hand_result[1] is not None else "Unknown"
                     print(self.frame,'Left:', left_hand, 'Right:', right_hand)
-                    if two_hand_result[1]==self.non_gester:
+                    if two_hand_result[1]==self.non_gester or two_hand_result[0]==self.non_gester:
                         print("进入动态")
                         self.move_flag=1
             else:
                 pass
         else:
             hand_sign_id = self._dynamic_gesture(image)
-            self.move_flag=1
         show_image = image.copy()
         return show_image, hand_sign_id
 
 
 if __name__=='__main__':
     gesture_detector = GestureRecognition()
-    cap = cv.VideoCapture(0)
+    cap = cv.VideoCapture(1)
     mode = 0
     number = -1
     while True:
+        time_start = time.time()
         ret, image = cap.read()
         image = cv.flip(image, 1)  # Mirror display
         image = cv.cvtColor(image, cv.COLOR_BGR2RGB)
         show_image, gesture_id = gesture_detector.recognize(image, number, mode)
-        # print(f'gesture_id: {gesture_id}')
+        # fps
+        time_used = time.time()-time_start
+        fps = 1//time_used
+        cv.putText(show_image, f'fps: {round(fps, 2)}', (10, 30), cv.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv.LINE_AA)
+        cv.putText(show_image, f'Gesture ID: {gesture_id}', (10, 60), cv.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv.LINE_AA)
         cv.imshow('Character writing', show_image)
-        if cv.waitKey(1) == ord('q'):  # 点击视频，输入q退出
+        if cv.waitKey(10) == ord('q'):  # 点击视频，输入q退出
             break
     cv.destroyAllWindows()

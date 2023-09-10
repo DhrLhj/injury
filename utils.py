@@ -16,10 +16,13 @@ class FixedSizeQueue:
     def get_all(self):
         return list(self.queue)
 
+    def __len__(self):
+        return len(self.get_all())
+
     def full(self):
         return len(self.queue) == self.size
 
-    def most_common_in_last_n(self, n=30):
+    def most_common_in_last_n(self, n=15):
         # 获取最后n个元素
         last_n_items = list(self.queue)[-n:]
         # 使用Counter统计元素出现的次数
