@@ -22,6 +22,9 @@ class FixedSizeQueue:
     def full(self):
         return len(self.queue) == self.size
 
+    def clean(self):
+        self.queue.clear()
+
     def most_common_in_last_n(self, n=30):
     # 获取最后n个元素
         last_n_items = list(self.queue)[-n:]
@@ -47,12 +50,14 @@ import pyautogui
 import time
 
 class GestureLookup:
-    def __init__(self, csv_path):
-        self.df = pd.read_csv(csv_path, dtype=str)  # 确保读取的列都是字符串格式
+    def __init__(self, xlsx_path):
+        # 使用read_excel代替read_csv
+        self.df = pd.read_excel(xlsx_path, engine='openpyxl',dtype=str)
         self.id_to_gesture = dict(zip(self.df.iloc[:, 0], self.df.iloc[:, 1]))
 
     def get_gesture_by_id(self, gesture_id):
-        return self.id_to_gesture.get(str(gesture_id), ' ')  # 在查询之前将gesture_id转换为字符串
+        # print( self.id_to_gesture)
+        return self.id_to_gesture.get(gesture_id, ' ')
 
 def press_keys_from_string(s: str):
     """
@@ -65,18 +70,25 @@ def press_keys_from_string(s: str):
     This function will press and hold down the keys in the order they appear in the string, 
     and then release them in the same order.
     """
+    if not isinstance(s, str):
+       
+        return
     key_list=['f5','esc','up','down','left','right']
     if s in key_list:
         pyautogui.press(s)  # 模拟按下F5键
         return
-    s=[tem for tem in s if tem !=' ']
+    print("这是",s)
+    
+    s=[z for z in s if z !=' ']
     if s!=[]:
-        pyautogui.keyDown('ctrl')
+        pyautogui.keyDown('crtl')
+        pyautogui.keyDown('home')
         for char in s:
             pyautogui.keyDown(char)
         for char in s:
             pyautogui.keyUp(char)
-        pyautogui.keyUp('ctrl')
+        pyautogui.keyUp('crtl')
+        pyautogui.keyUp('home')
         print(s)
 
 def calc_landmark_list( image, landmarks):

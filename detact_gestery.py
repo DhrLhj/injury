@@ -177,9 +177,7 @@ class GestureRecognition:
         self.mouse_queue = FixedSizeQueue(10)
         self.mouse_move_temp = np.zeros(3,)
         self.ema_mouse = 0.0
-
-
-        # self.lookup = GestureLookup(r'C:\Users\25352\Desktop\map.csv')
+        self.lookup = GestureLookup(r'map.xlsx')
 
     def _mouse_move(self, image):
         results = self.pose.process(image)
@@ -319,6 +317,8 @@ class GestureRecognition:
                                 delta = arr_poses[-1,:1,:2] - arr_poses[0, :1, :2]
                                 print(f'mouse move: {delta}')
                                 mouse_move(delta[0, 0], delta[0, 1])
+                        else:
+                            self.mouse_queue.clear()
 
                         # print(two_hand_result[1])
                 # print('Left:',name[two_hand_result[0]],'Right',name[two_hand_result[1]])
