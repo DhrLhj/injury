@@ -344,5 +344,6 @@ if __name__=='__main__':
         cv.putText(show_image, f'fps: {round(fps, 2)}', (10, 30), cv.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv.LINE_AA)
         cv.putText(show_image, f'Gesture ID: {gesture_id}', (10, 60), cv.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv.LINE_AA)
         cv.imshow('Character writing', show_image)
-        time.sleep(0.02)
+        if cv.waitKey(10) == ord('q'):  # 点击视频，输入q退出
+            break
     cv.destroyAllWindows()

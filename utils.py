@@ -66,11 +66,14 @@ def press_keys_from_string(s: str):
     and then release them in the same order.
     """
     s=[tem for tem in s if tem !=' ']
-    for char in s:
-        pyautogui.keyDown(char)
-    for char in s:
-        pyautogui.keyUp(char)
-    print(s)
+    if s!=[]
+        pyautogui.keyDown('ctrl')
+        for char in s:
+            pyautogui.keyDown(char)
+        for char in s:
+            pyautogui.keyUp(char)
+        pyautogui.keyUp('ctrl')
+        print(s)
 
 
 
