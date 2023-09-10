@@ -19,7 +19,7 @@ import RelationGraph from 'relation-graph/vue3'
 import {ElNotification} from "element-plus";
 
 export default {
-  name: "RightVideoOne",
+  name: "RightDetail",
   components: {RelationGraph},
   data() {
     return {
@@ -409,8 +409,8 @@ export default {
       })
     },
     // 展示当前选中的节点
-    onNodeClick($event) {
-      let node = this.$refs.seeksRelationGraph.getNodeById(this.currentChooseNodeId) // 选择当前节点
+    onNodeClick(node, $event) {
+      // let node = this.$refs.seeksRelationGraph.getNodeById(this.currentChooseNodeId) // 选择当前节点
 
       console.log('选中: ', node.id, node.x, node.y)
       console.log(node.targetNodes)
@@ -513,7 +513,7 @@ export default {
 
     },
         // 处理根据手势缩放事件
-        handleZoomGraph(eventId) {
+    handleZoomGraph(eventId) {
       // 获取要模拟滚动的元素
       let elements = document.querySelectorAll('span.c-mb-text');
 
@@ -587,8 +587,8 @@ export default {
     },
 
 
-// 展示当前选中的线
-onLineClick(lineObject, $event) {
+    // 展示当前选中的线
+    onLineClick(lineObject, $event) {
       console.log('onLineClick:', lineObject)
     },
     // 处理点击节点事件

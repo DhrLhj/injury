@@ -217,22 +217,21 @@ export default {
       this.clickBox(this.boxId);
     },
     clickBox(boxId) {
-      if (this.isPictrue) {
-        const box1 = document.getElementById('box1');
+      const box1 = document.getElementById('box1');
       const box2 = document.getElementById('box2');
       const box3 = document.getElementById('box3');
-      box1.style.backgroundColor = '#FFFFFF';
-      box2.style.backgroundColor = '#FFFFFF';
-      box3.style.backgroundColor = '#FFFFFF';
-      if (boxId === 1 && box1 !== null) {
-        box1.style.backgroundColor = '#99a9bf';
-      } else if (boxId === 2 && box2 !== null) {
-        box2.style.backgroundColor = '#99a9bf';
-      } else if (boxId === 3 && box3 !== null) {
-        box3.style.backgroundColor = '#99a9bf';
+      if (box1 !== null){
+        box1.style.backgroundColor = '#FFFFFF';
+        box2.style.backgroundColor = '#FFFFFF';
+        box3.style.backgroundColor = '#FFFFFF';
+        if (boxId === 1) {
+          box1.style.backgroundColor = '#99a9bf';
+        } else if (boxId === 2) {
+          box2.style.backgroundColor = '#99a9bf';
+        } else if (boxId === 3) {
+          box3.style.backgroundColor = '#99a9bf';
+        }
       }
-      }
-      
     },
 
     initCamera() {
@@ -342,6 +341,13 @@ export default {
         this.images.push(require('@/assets/leftimagebox/3.jpg'));
         this.imagesId += 1;
         window.alert("已加载一张图片");
+        setTimeout(() => {
+          // 自动确认弹窗
+          const alertBox = document.querySelector('.alert');
+          if (alertBox) {
+            alertBox.click();
+          }
+        }, 2000); // 延迟2秒后自动确认
       }      
       // }else{
       // // 获取选择的文件
