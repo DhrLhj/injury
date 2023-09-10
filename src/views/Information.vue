@@ -50,6 +50,28 @@ export default {
         handlenext() {
             document.querySelector("#TrainingResults").click();
         },
+        handleKeydown(event) {
+        this.keysPressed[event.key] = true;
+        if (this.keysPressed['a'] && this.keysPressed['d']) {
+          this.jioaxue();
+          this.keysPressed = {};
+        } else if (this.keysPressed['a'] && this.keysPressed['f']) {
+          this.geren();
+          this.keysPressed = {};
+        } else if (this.keysPressed['a'] && this.keysPressed['e']) {
+          this.tongzhi();
+          this.keysPressed = {};
+        } else if (this.keysPressed['a'] && this.keysPressed['b']) {
+          this.shangqing();
+          this.keysPressed = {};
+        } else if (this.keysPressed['a'] && this.keysPressed['c']) {
+          this.jijiu();
+          this.keysPressed = {};
+        }
+      },
+      handleKeyup(event) {
+        delete this.keysPressed[event.key];
+      },
         
     },
     created() {
@@ -69,11 +91,15 @@ export default {
 
     },
     mounted() {
+        document.addEventListener('keydown', this.handleKeydown);
+      document.addEventListener('keyup', this.handleKeyup);
     },
     beforeUnmount() {
       console.log("退出information")
       this.$ws.removeEventListener('message', this.handleWebSocketMessage);
       //this.$ws.close()
+      document.removeEventListener('keydown', this.handleKeydown);
+      document.removeEventListener('keyup', this.handleKeyup);
     }
 
 }
