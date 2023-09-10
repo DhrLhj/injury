@@ -11,7 +11,7 @@ class GestureLookup:
         return self.id_to_gesture.get(gesture_id, ' ')
 
 # 使用示例
-lookup = GestureLookup(r'C:\Users\25352\Desktop\工作簿1.xlsx')
-gesture_id = '25'
+lookup = GestureLookup(r'C:\Users\25352\Desktop\1\map.xlsx')
+gesture_id = '1126'
 gesture_string = lookup.get_gesture_by_id(gesture_id)
 print(gesture_string)
