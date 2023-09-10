@@ -114,7 +114,6 @@ def key_input(key_name='esc',time_sleep=1):
     win32api.keybd_event(VK_CODE[key_name],0,win32con.KEYEVENTF_KEYUP,0)
     time.sleep(time_sleep)
     
-
 def key_input_ctrl(key_name="backspace",time_sleep=1):
     win32api.keybd_event(0x11, 0, 0, 0)
     win32api.keybd_event(VK_CODE[key_name], 0, 0, 0)

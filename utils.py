@@ -22,16 +22,28 @@ class FixedSizeQueue:
     def full(self):
         return len(self.queue) == self.size
 
-    def most_common_in_last_n(self, n=15):
-        # 获取最后n个元素
+    def most_common_in_last_n(self, n=30):
+    # 获取最后n个元素
         last_n_items = list(self.queue)[-n:]
+        last_n_items=[i.item() for i in last_n_items if i is not None]
+        last_five_items=list(self.queue)[-5:]
+        print(last_five_items)
+        if None in last_five_items:
+            return None,None
         # 使用Counter统计元素出现的次数
         count = Counter(last_n_items)
         # 获取出现次数最多的元素
         most_common = count.most_common(1)
-        if most_common:
-            return most_common[0]  # 返回(value, count)元组
-        return None
+        print(last_n_items)
+        print("times",most_common)
+        if most_common and most_common[0][1] > 12:
+
+            return most_common[0]  # Returns (value, count) tuple
+        return None, None
+    
+       # 清空队列的方法
+    def clear(self):
+        self.queue.clear()
 
 
 

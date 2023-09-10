@@ -12,6 +12,44 @@ from util.dataloader import get_templates, norm_pose
 from config import DynamicGesture as DG
 from models.dtw import dtw
 from models.modules import coord_norm,distance,vDistance,plotgesture,vDistance2
+from gester_encoder import *
+import math
+
+
+class TransformerModel(nn.Module):
+    def __init__(self, d_model, nhead, num_layers, num_classes, num_nodes=21):
+        super(TransformerModel, self).__init__()
+
+        # Generate position encoding
+        position = torch.arange(num_nodes).unsqueeze(1).float()
+        div_term = torch.exp(torch.arange(0, d_model, 2).float() * -(math.log(10000.0) / d_model))
+        self.position_enc = torch.zeros(num_nodes, d_model)
+        self.position_enc[:, 0::2] = torch.sin(position * div_term)
+        self.position_enc[:, 1::2] = torch.cos(position * div_term)
+
+        # Add learnable group embedding
+        self.embedding = nn.Linear(2, d_model)
+
+        self.encoder_layer = nn.TransformerEncoderLayer(d_model, nhead)
+        self.encoder = nn.TransformerEncoder(self.encoder_layer, num_layers=num_layers)
+        self.classifier = nn.Linear(d_model, num_classes)
+    
+    def forward(self, x):
+        # Reshape input
+        x = x.view(-1, 21, 2)  # x shape becomes [batch_size, 21, 2]
+
+        # Embedding the input
+        x = self.embedding(x)  # x shape becomes [batch_size, 21, d_model]
+
+        # Add position encoding
+        x += self.position_enc
+
+        x = x.permute(1, 0, 2)  # Change shape to [seq_len, batch_size, d_model] as expected by Transformer
+        x = self.encoder(x)
+        x = self.classifier(x[0])  # Use the first token for classification
+        return x
+    def load_model(self,path):
+        return torch.load(path, map_location=torch.device('cpu'))
 # from queue import Queue
 
 mp_drawing = mp.solutions.drawing_utils
@@ -108,34 +146,34 @@ class GestureRecognition:
         self.pose = mp_pose.Pose(min_detection_confidence=0.5, min_tracking_confidence=0.5)
         self.hands = self.mp_hands.Hands(
             static_image_mode=self.use_static_image_mode,
-            max_num_hands=2,
+            max_num_hands=4,
             min_detection_confidence=self.min_detection_confidence,
             min_tracking_confidence=self.min_tracking_confidence,
         )
 
-        self.keypoint_classifier =  SimpleModel()
+        self.keypoint_classifier =  TransformerModel(d_model=24, nhead=4, num_layers=3, num_classes=14)
         # 加载整个模型
-        self.keypoint_classifier = self.keypoint_classifier.load_model('best_model.pth')
+        self.keypoint_classifier = self.keypoint_classifier.load_model(r'best_modelv5.pth').to('cpu')
+        self.keypoint_classifier.position_enc=self.keypoint_classifier.position_enc.to('cpu')
         self.keypoint_classifier.eval()
         self.frame=-1
         self.left_queue = FixedSizeQueue(60)
         self.right_queue = FixedSizeQueue(60)
-        self.time_gap=15
+        self.time_gap=25
         self.non_gester=1
         self.previous_land_mark=None
         self.current_land_mark=None
         self.threshold=0.2
-        self.result_queue=FixedSizeQueue(3)
+        self.result_queue=FixedSizeQueue(2)
         self.result_queue.push([-1,-1])
         self.move_flag=0
         # todo: template
-        self.template_dynamic_gesture = get_templates("gesture_template/0907_01")[1]
+        self.template_dynamic_gesture = get_templates(r"gesture_template\0908")[1]
         # self.image_holder = FixedSizeQueue(30)
         self.pose_queue = FixedSizeQueue(20)
 
-    def _dynamic_gesture(self, image) -> int:
+    def _dynamic_gesture(self,image) -> int:
         # pose estimation
-        time_start = time.time()
         results = self.pose.process(image)
         if results is None:
             return None
@@ -180,18 +218,34 @@ class GestureRecognition:
     def recognize(self, image, number=13, mode=0):
         # bounding_rect
         self.frame=self.frame+1
-        hand_sign_id = 0
+        result_hand_sign_id = -1
         ############Detection implementation #############################################################
         image.flags.writeable = False
-        # if not self.move_flag:
-        if False:
+        if not self.move_flag:
             results = self.hands.process(image)
             image.flags.writeable = True
             #####################################################################
             if results.multi_hand_landmarks:
+                # Pair each hand with its index
+                indexed_hands = list(enumerate(results.multi_hand_landmarks))
+                
+                # Sort indexed hands based on the average z value (depth) of landmarks
+                sorted_indexed_hands = sorted(
+                    indexed_hands, 
+                    key=lambda idx_hand: sum([landmark.z for landmark in idx_hand[1].landmark]) / len(idx_hand[1].landmark)
+                )
+                # Extracting sorted indices
+                sorted_indices = [idx_hand[0] for idx_hand in sorted_indexed_hands][:2]
+
+                # Get the front two hands
+                front_two_hands = []
+                for tem in sorted_indices:
+                    front_two_hands.append(results.multi_hand_landmarks[tem])
                 two_hand_result=[None,None]
-                for hand_idx, landmarks in enumerate(results.multi_hand_landmarks):
-                    handness = results.multi_handedness[hand_idx].classification[0].label  # This will give either 'Right' or 'Left'
+                for hand_idx, landmarks in enumerate(front_two_hands):
+                    # print("hand_idx",hand_idx)
+                   
+                    handness = results.multi_handedness[sorted_indices[hand_idx]].classification[0].label  # This will give either 'Right' or 'Left'
                     mp_drawing.draw_landmarks(image, landmarks, self.mp_hands.HAND_CONNECTIONS)
                     landmark_list = calc_landmark_list(image, landmarks)
                         # 由实际像素转换为相对手腕关键点像素坐标并将坐标归一化
@@ -201,29 +255,53 @@ class GestureRecognition:
                     _, hand_sign_id = torch.max(hand_sign_id.data, 0)
                     
                     if handness=='Left':
+                        # print('left')
                         two_hand_result[0]=hand_sign_id
+                        # print(two_hand_result[0])
                     else:
+                        # print('right')
                         two_hand_result[1]=hand_sign_id
+                        # print(two_hand_result[1])
                 # print('Left:',name[two_hand_result[0]],'Right',name[two_hand_result[1]])
                 self.left_queue.push(two_hand_result[0])
                 self.right_queue.push(two_hand_result[1])
+                # print(two_hand_result)
 
                 if self.frame%self.time_gap==0:
+                    print()
                     two_hand_result[0]=self.left_queue.most_common_in_last_n()[0]
+                    if two_hand_result[0] is not None:
+                        self.left_queue.clear()
+                        
                     two_hand_result[1]=self.right_queue.most_common_in_last_n()[0]
+                    if two_hand_result[1] is not None:
+                        
+                        self.right_queue.clear()
                     self.result_queue.push(two_hand_result)
                     left_hand = name[two_hand_result[0]] if two_hand_result[0] is not None else "Unknown"
                     right_hand = name[two_hand_result[1]] if two_hand_result[1] is not None else "Unknown"
-                    print(self.frame,'Left:', left_hand, 'Right:', right_hand)
+                    left_hand_id=two_hand_result[0] if two_hand_result[0] is not None else None
+                    right_hand_id = two_hand_result[1] if two_hand_result[1] is not None else None
                     if two_hand_result[1]==self.non_gester or two_hand_result[0]==self.non_gester:
-                        print("进入动态")
+                        res=list(self.result_queue.queue)
+                        print(res)
                         self.move_flag=1
+                        for tem in res:
+                            if 1 not in tem:
+                                self.move_flag=0
+                                break
+                        if self.move_flag:
+                            print("进入动态")
+                    else:
+                        result_hand_sign_id=encode(left_hand_id,right_hand_id)
+                        print(self.frame,'Left:', left_hand, 'Right:', right_hand)
             else:
                 pass
         else:
-            hand_sign_id = self._dynamic_gesture(image)
+            result_hand_sign_id = self._dynamic_gesture(image)
+            result_hand_sign_id=encode(dynamic=result_hand_sign_id)
         show_image = image.copy()
-        return show_image, hand_sign_id
+        return show_image, result_hand_sign_id
 
 
 if __name__=='__main__':
