@@ -14,7 +14,7 @@
                 v-model="dialogVisible"
                 title="Tips：请允许访问摄像头权限进行拍照"
                 width="40%"
-                @close = "stopNavigator,stopTracking"
+                @close = "stopNavigator, stopTracking"
                 @open="startTracking"
             >
               <div style="width: 90%;margin-left: 10%;">
@@ -143,7 +143,7 @@ export default {
       videoStream: null,
       isPictrue: false,
       dialogVisible:ref(false),
-      boxId: 0,
+      boxId: 1,
       images: [require('@/assets/leftimagebox/1.jpg'), require('@/assets/leftimagebox/2.jpg')],
       imagesId: 2 ,
       images1: [
@@ -158,14 +158,7 @@ export default {
   },
   
   methods: {
-    startTracking() {
-      document.addEventListener('keydown', this.handleKeydown);
-      document.addEventListener('keyup', this.handleKeyup);
-    },
-    stopTracking() {
-      document.removeEventListener('keydown', this.handleKeydown);
-      document.removeEventListener('keyup', this.handleKeyup);
-    },
+
     handleKeydown(event) {
         this.keysPressed[event.key] = true;
         if (this.keysPressed['c'] && this.keysPressed['b']) {//拍摄
@@ -201,44 +194,66 @@ export default {
         } else if (this.keysPressed['g'] && this.keysPressed['b']) {//载入
           this.uploadFile();
           this.keysPressed = {};
-        } else if (this.keysPressed['h'] && this.keysPressed['b']) {//图片选择下滑          
-            this.selectedImageIndex += 1
-            if (this.selectedImageIndex > this.images.length - 1) {
-              this.selectedImageIndex = this.images.length - 1
-            }
+        } else if (this.keysPressed['h'] && this.keysPressed['b']) {//图片选择下滑
+          this.selectedImageIndex += 1
+          if (this.selectedImageIndex < this.images.length) {
             this.selectImage(this.selectedImageIndex);
-            this.keysPressed = {};
-          } else if (this.keysPressed['i'] && this.keysPressed['b']) {//图片选择上滑
-            this.selectedImageIndex -= 1
-            if (this.selectedImageIndex < 0) {
-              this.selectedImageIndex = 0
-            }
-            this.selectImage(this.selectedImageIndex);
-            this.keysPressed = {};
-          } else if (this.keysPressed['j'] && this.keysPressed['b']) {//方案选择下滑
-            this.boxId += 1
-            if (this.boxId > 3) {
-              this.boxId = 3
-            }
-            this.clickBox(this.boxId);
-            this.keysPressed = {};
-          } else if (this.keysPressed['k'] && this.keysPressed['b']) {//方案选择上滑
-            this.boxId -= 1
-            if (this.boxId < 1) {
-              this.boxId = 1
-            }
-            this.clickBox(this.boxId);
-            this.keysPressed = {};
-          } else if (this.keysPressed['r'] && this.keysPressed['b']) {//语音播放
-            this.speakText();
-            this.keysPressed = {};
+          }else{
+            this.selectedImageIndex = this.images.length - 1
           }
-          },
+          this.keysPressed = {};
+        } else if (this.keysPressed['i'] && this.keysPressed['b']) {//图片选择上滑
+          this.selectedImageIndex -= 1
+          if (this.selectedImageIndex > -1) {
+            this.selectImage(this.selectedImageIndex);
+          } else {
+            this.selectedImageIndex = 0
+          }
+          this.keysPressed = {};
+        } else if (this.keysPressed['j'] && this.keysPressed['b']) {//方案选择下滑
+          this.boxId += 1
+          if (this.boxId > 3) {
+            this.boxId = 3
+          }
+          this.clickBox(this.boxId);
+          this.keysPressed = {};
+        } else if (this.keysPressed['k'] && this.keysPressed['b']) {//方案选择上滑
+          this.boxId -= 1
+          if (this.boxId < 1) {
+            this.boxId = 1
+          }
+          this.clickBox(this.boxId);
+          this.keysPressed = {};
+        } else if (this.keysPressed['q'] && this.keysPressed['b']) {//语音播放
+          this.speakText();
+          console.log("aaa")
+          this.keysPressed = {};
+        } else if (this.keysPressed['r'] && this.keysPressed['b']) {//急救
+          router.push("/study/right/detail");
+          this.keysPressed = {};
+        } else if (this.keysPressed['s'] && this.keysPressed['b']) {//教学
+          router.push("/Teaching");
+          this.keysPressed = {};
+        }
+    },
 
+    handleKeyup(event) {
+      delete this.keysPressed[event.key];
+    },
 
+    startTracking() {
+      document.addEventListener('keydown', this.handleKeydown);
+      document.addEventListener('keyup', this.handleKeyup);
+    },
+    stopTracking() {
+      document.removeEventListener('keydown', this.handleKeydown);
+      document.removeEventListener('keyup', this.handleKeyup);
+    },
     selectImage(index) {
       this.selectedImageIndex = index;
       this.isPictrue = true;
+      this.boxId = 1
+      this.clickBox(this.boxId);
       console.log('选择了')
 
     },
@@ -343,7 +358,7 @@ export default {
       // 获取Canvas中的图像数据
       const imageData = canvasElement.toDataURL('image/png');
       this.images.push(imageData);
-
+      this.stopNavigator();
       // // 显示拍摄的照片
       // this.photoUrl = imageData;
 
@@ -424,6 +439,7 @@ export default {
         setTimeout(() => {
           // 自动确认弹窗
           const alertBox = document.querySelector('.alert');
+          console.log(alertBox)
           if (alertBox) {
             alertBox.click();
           }
@@ -489,12 +505,18 @@ export default {
         this.selectedImageIndex += 1
         if (this.selectedImageIndex > this.images.length - 1) {
           this.selectedImageIndex = this.images.length - 1
+        }else{
+          this.boxId = 1;
+          this.clickBox(this.boxId);
         }
         this.selectImage(this.selectedImageIndex);
       } else if (message === '29') {//图片选择上滑
         this.selectedImageIndex -= 1
         if (this.selectedImageIndex < 0) {
           this.selectedImageIndex = 0
+        } else{
+          this.boxId = 1;
+          this.clickBox(this.boxId);
         }
         this.selectImage(this.selectedImageIndex);
       } else if (message === '15') {//方案选择下滑

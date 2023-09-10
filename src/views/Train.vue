@@ -168,6 +168,7 @@
 import Record from "../common/record-sdk";
 import { ref } from 'vue'
 import {sendPhoto} from '@/api/api'
+import router from "@/router";
 // import useRecordVideo from './hooks/useRecordVideo';
 // import useRecordVideo from "@/hooks/useRecordVideo";
 
@@ -309,7 +310,7 @@ export default {
             const video = document.querySelector('.myVideo');
             video.play();
         },
-      initCamera() {
+        initCamera() {
         navigator.mediaDevices.getUserMedia({ video: true })
           .then(stream => {
             const videoElement = this.$refs.videoElement;
@@ -382,7 +383,7 @@ export default {
 				}
 			});
 		},
-		stopRecord() {
+		    stopRecord() {
 			console.log("stop record now.");
 			let self = this;
 			self.isFinished = false;
@@ -409,54 +410,45 @@ export default {
 					console.log("stop record failed.");
 				}
 			});
-            self.recorder.stop();
+      self.recorder.stop();
 		},
 
-        
+        handleKeydown(event) {
+        this.keysPressed[event.key] = true;
+        if (this.keysPressed['c'] && this.keysPressed['i']) {//教学
+          router.push("/Teaching");
+          this.keysPressed = {};
+        }
+      },
+        handleKeyup(event) {
+        delete this.keysPressed[event.key];
+      },
     },
-    created() 
-    {
-      this.msg=this.voiceMsg
-        this.$ws.addEventListener('message', (event) => {
-        // 处理 WebSocket 消息
-        const message = event.data;
+  created()
+  {
+
+    this.handleWebSocketMessage = (event) => {
+      const message = event.data;
+      if (message !== "-1"){
         console.log('WebSocket消息：', message);
-        
-        if (message === '1') {
-            this.selected(0);
-        } else if (message === '2') {
-            this.selected(1);
-        } else if (message === '3') {
-            this.selected(2);
-        } else if (message === '4') {
-            this.selected(3);
-        } else if (message === '5') {
-            this.selected(4);
-        } else if (message === '6') {
-            this.selected(5);
-        } else if (message === '7') {
-            this.selected(6);
-        } else if (message === '8') {
-            this.selected(7);
-        } else if (message === '9') {
-            this.selected(8);
-        } else if (message === '10') {
-            this.selected(9);
-        } else if (message.includes('向上滑动') && this.isactive >0) {
-            this.selected(this.isactive-1);
-        } else if (message.includes('向下滑动') && this.isactive <9) {
-            this.selected(this.isactive+1);
-        } else if (message === 'gg') {
-            this.playVedio();
-        } 
+        this.textmessage = 'WebSocket消息：' + message;
 
-        
-        
 
-    })
-    },
-    mounted() {
-    }
+      }
+    };
+    this.$ws.addEventListener('message', this.handleWebSocketMessage);
+
+  },
+  mounted() {
+    document.addEventListener('keydown', this.handleKeydown);
+    document.addEventListener('keyup', this.handleKeyup);
+  },
+  beforeUnmount() {
+    console.log("退出teach")
+    this.$ws.removeEventListener('message', this.handleWebSocketMessage);
+    document.removeEventListener('keydown', this.handleKeydown);
+    document.removeEventListener('keyup', this.handleKeyup);
+  }
 
 }
 </script>

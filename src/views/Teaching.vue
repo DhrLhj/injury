@@ -102,6 +102,8 @@
 </template>
 
 <script>
+import router from "@/router";
+
 export default {
     name:"Teaching",
     data(){
@@ -148,6 +150,12 @@ export default {
         } else if (this.keysPressed['c'] && this.keysPressed['f']) {
           this.bad_bad();
           this.keysPressed = {};
+        } else if (this.keysPressed['c'] && this.keysPressed['h']) {//急救
+          router.push("/HomeTrain");
+          this.keysPressed = {};
+        } else if (this.keysPressed['c'] && this.keysPressed['g']) {//教学
+          router.push("/Teaching");
+          this.keysPressed = {};
         }
       },
       handleKeyup(event) {
@@ -163,7 +171,7 @@ export default {
           console.log('WebSocket消息：', message);
           this.textmessage = 'WebSocket消息：' + message;
 
-          if (message === '0514') { //学习
+          if (message === '0515') { //学习
             this.hh_hh();
           } else if (message === '0520') { //训练
             this.ii_ii();

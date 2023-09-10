@@ -113,6 +113,8 @@ export default {
       //   },
       handleKeydown(event) {
         this.keysPressed[event.key] = true;
+        console.log(this.keysPressed)
+        // this.$set(this.keysPressed, event.key, true);
         if (this.keysPressed['a'] && this.keysPressed['d']) {
           this.jioaxue();
           this.keysPressed = {};
@@ -125,7 +127,7 @@ export default {
         } else if (this.keysPressed['a'] && this.keysPressed['b']) {
           this.shangqing();
           this.keysPressed = {};
-        } else if (this.keysPressed['a'] && this.keysPressed['c']) {
+        } else if (this.keysPressed['b'] && this.keysPressed['k']) {
           this.jijiu();
           this.keysPressed = {};
         }
@@ -166,7 +168,7 @@ export default {
       document.addEventListener('keydown', this.handleKeydown);
       document.addEventListener('keyup', this.handleKeyup);
     },
-    beforeDestroy() {
+    beforeUnmount() {
       console.log("退出home")
       this.$ws.removeEventListener('message', this.handleWebSocketMessage);
       document.removeEventListener('keydown', this.handleKeydown);

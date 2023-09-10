@@ -3,7 +3,7 @@
                 <div style="margin:10vh 0 0 10vh;width:70% ;">
                 <span>个人信息</span>
                 <span style="float: right;color: #306eff;"><el-icon><Edit/></el-icon>编辑</span>
-                <div style="height: 50vh;w;margin-top: 2vh;background-color: rgb(238, 239, 240);border-radius: 20px;">
+                <div style="height: 50vh;margin-top: 2vh;background-color: rgb(238, 239, 240);border-radius: 20px;">
                     
                     <el-row :gutter="20">
                         <el-col :span="2"><div class="grid-content ep-bg-purple" /></el-col>
@@ -52,20 +52,8 @@ export default {
         },
         handleKeydown(event) {
         this.keysPressed[event.key] = true;
-        if (this.keysPressed['a'] && this.keysPressed['d']) {
-          this.jioaxue();
-          this.keysPressed = {};
-        } else if (this.keysPressed['a'] && this.keysPressed['f']) {
-          this.geren();
-          this.keysPressed = {};
-        } else if (this.keysPressed['a'] && this.keysPressed['e']) {
-          this.tongzhi();
-          this.keysPressed = {};
-        } else if (this.keysPressed['a'] && this.keysPressed['b']) {
-          this.shangqing();
-          this.keysPressed = {};
-        } else if (this.keysPressed['a'] && this.keysPressed['c']) {
-          this.jijiu();
+        if (this.keysPressed['q'] && this.keysPressed['w']) {
+          router.push("/home")
           this.keysPressed = {};
         }
       },
