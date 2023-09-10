@@ -47,12 +47,14 @@ import pyautogui
 import time
 
 class GestureLookup:
-    def __init__(self, csv_path):
-        self.df = pd.read_csv(csv_path, dtype=str)  # 确保读取的列都是字符串格式
+    def __init__(self, xlsx_path):
+        # 使用read_excel代替read_csv
+        self.df = pd.read_excel(xlsx_path, engine='openpyxl',dtype=str)
         self.id_to_gesture = dict(zip(self.df.iloc[:, 0], self.df.iloc[:, 1]))
 
     def get_gesture_by_id(self, gesture_id):
-        return self.id_to_gesture.get(str(gesture_id), ' ')  # 在查询之前将gesture_id转换为字符串
+        # print( self.id_to_gesture)
+        return self.id_to_gesture.get(gesture_id, ' ')
 
 def press_keys_from_string(s: str):
     """
@@ -70,7 +72,7 @@ def press_keys_from_string(s: str):
         pyautogui.press(s)  # 模拟按下F5键
         return
     s=[tem for tem in s if tem !=' ']
-    if s!=[]
+    if s!=[]:
         pyautogui.keyDown('ctrl')
         for char in s:
             pyautogui.keyDown(char)

@@ -174,7 +174,7 @@ class GestureRecognition:
         self.template_dynamic_gesture = get_templates(r"gesture_template\0908")[1]
         # self.image_holder = FixedSizeQueue(30)
         self.pose_queue = FixedSizeQueue(20)
-        self.lookup = GestureLookup(r'C:\Users\25352\Desktop\map.csv')
+        self.lookup = GestureLookup(r'map.xlsx')
 
     def _dynamic_gesture(self,image) -> int:
         # pose estimation
