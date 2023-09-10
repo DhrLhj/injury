@@ -1,7 +1,7 @@
 from collections import deque, Counter
 import copy
 import itertools
-
+import pandas as pd
 class FixedSizeQueue:
     def __init__(self, size):
         self.size = size
@@ -27,17 +27,14 @@ class FixedSizeQueue:
         last_n_items = list(self.queue)[-n:]
         last_n_items=[i.item() for i in last_n_items if i is not None]
         last_five_items=list(self.queue)[-5:]
-        print(last_five_items)
         if None in last_five_items:
             return None,None
         # 使用Counter统计元素出现的次数
         count = Counter(last_n_items)
         # 获取出现次数最多的元素
         most_common = count.most_common(1)
-        print(last_n_items)
         print("times",most_common)
         if most_common and most_common[0][1] > 12:
-
             return most_common[0]  # Returns (value, count) tuple
         return None, None
     
@@ -48,6 +45,14 @@ class FixedSizeQueue:
 
 import pyautogui
 import time
+
+class GestureLookup:
+    def __init__(self, csv_path):
+        self.df = pd.read_csv(csv_path, dtype=str)  # 确保读取的列都是字符串格式
+        self.id_to_gesture = dict(zip(self.df.iloc[:, 0], self.df.iloc[:, 1]))
+
+    def get_gesture_by_id(self, gesture_id):
+        return self.id_to_gesture.get(str(gesture_id), ' ')  # 在查询之前将gesture_id转换为字符串
 
 def press_keys_from_string(s: str):
     """
@@ -60,10 +65,12 @@ def press_keys_from_string(s: str):
     This function will press and hold down the keys in the order they appear in the string, 
     and then release them in the same order.
     """
+    s=[tem for tem in s if tem !=' ']
     for char in s:
         pyautogui.keyDown(char)
     for char in s:
         pyautogui.keyUp(char)
+    print(s)
 
 
 

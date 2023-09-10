@@ -7,6 +7,7 @@ import torch.nn as nn
 from split_train_test import *
 from utils import *
 import time
+import pandas as pd
 
 from util.dataloader import get_templates, norm_pose
 from config import DynamicGesture as DG
@@ -173,6 +174,7 @@ class GestureRecognition:
         self.template_dynamic_gesture = get_templates(r"gesture_template\0908")[1]
         # self.image_holder = FixedSizeQueue(30)
         self.pose_queue = FixedSizeQueue(20)
+        self.lookup = GestureLookup(r'C:\Users\25352\Desktop\map.csv')
 
     def _dynamic_gesture(self,image) -> int:
         # pose estimation
@@ -305,11 +307,17 @@ class GestureRecognition:
                     else:
                         result_hand_sign_id=encode(left_hand_id,right_hand_id)
                         print(self.frame,'Left:', left_hand, 'Right:', right_hand)
+                        print(result_hand_sign_id)
+                        key=self.lookup.get_gesture_by_id(result_hand_sign_id)
+                        print("key",key)
+                        press_keys_from_string(key)
             else:
                 pass
         if self.move_flag:
             result_hand_sign_id = self._dynamic_gesture(image)
             result_hand_sign_id=encode(dynamic=result_hand_sign_id)
+            key=self.lookup.get_gesture_by_id(result_hand_sign_id)
+            press_keys_from_string(key)
         elif self.catch_flag:
             
             #追踪代码
@@ -336,6 +344,5 @@ if __name__=='__main__':
         cv.putText(show_image, f'fps: {round(fps, 2)}', (10, 30), cv.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv.LINE_AA)
         cv.putText(show_image, f'Gesture ID: {gesture_id}', (10, 60), cv.FONT_HERSHEY_SIMPLEX, 1, (0, 0, 255), 2, cv.LINE_AA)
         cv.imshow('Character writing', show_image)
-        if cv.waitKey(10) == ord('q'):  # 点击视频，输入q退出
-            break
+        time.sleep(0.02)
     cv.destroyAllWindows()
