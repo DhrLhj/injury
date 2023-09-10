@@ -115,14 +115,19 @@ export default {
         this.keysPressed[event.key] = true;
         if (this.keysPressed['a'] && this.keysPressed['d']) {
           this.jioaxue();
+          this.keysPressed = {};
         } else if (this.keysPressed['a'] && this.keysPressed['f']) {
           this.geren();
+          this.keysPressed = {};
         } else if (this.keysPressed['a'] && this.keysPressed['e']) {
           this.tongzhi();
+          this.keysPressed = {};
         } else if (this.keysPressed['a'] && this.keysPressed['b']) {
           this.shangqing();
+          this.keysPressed = {};
         } else if (this.keysPressed['a'] && this.keysPressed['c']) {
           this.jijiu();
+          this.keysPressed = {};
         }
       },
       handleKeyup(event) {

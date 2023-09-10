@@ -141,10 +141,13 @@ export default {
         this.keysPressed[event.key] = true;
         if (this.keysPressed['c'] && this.keysPressed['d']) {
           this.hh_hh();
+          this.keysPressed = {};
         } else if (this.keysPressed['c'] && this.keysPressed['e']) {
           this.ii_ii();
+          this.keysPressed = {};
         } else if (this.keysPressed['c'] && this.keysPressed['f']) {
           this.bad_bad();
+          this.keysPressed = {};
         }
       },
       handleKeyup(event) {
