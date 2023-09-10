@@ -65,6 +65,9 @@ def press_keys_from_string(s: str):
     This function will press and hold down the keys in the order they appear in the string, 
     and then release them in the same order.
     """
+    if s =='f5':
+        pyautogui.press('f5')  # 模拟按下F5键
+        return
     s=[tem for tem in s if tem !=' ']
     if s!=[]
         pyautogui.keyDown('ctrl')
@@ -74,9 +77,6 @@ def press_keys_from_string(s: str):
             pyautogui.keyUp(char)
         pyautogui.keyUp('ctrl')
         print(s)
-
-
-
 
 def calc_landmark_list( image, landmarks):
         image_width, image_height = image.shape[1], image.shape[0]
