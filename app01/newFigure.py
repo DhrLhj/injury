@@ -6,6 +6,7 @@ import cv2
 import numpy as np
 import base64
 import time
+from app01.detact_gestery import *
 
 def get_angle(v1, v2):
     angle = np.dot(v1, v2) / (np.sqrt(np.sum(v1 * v1)) * np.sqrt(np.sum(v2 * v2)))
@@ -160,148 +161,139 @@ def get_str_guester(left_up_fingers,right_up_fingers,list_lms):
     return str_guester
 
 
-def run(bytes_data):
-    # frame_count = 0
-    # max_gesture_count = 0
-    # max_gesture = None
-    # gesture_count = {}
-
-    # 将视频二进制数据保存为临时文件
-    # with tempfile.NamedTemporaryFile(suffix='.mp4', delete=False) as temp_file:
-    #     temp_file.write(bytes_data)
-    #     print(temp_file.name)
-    #     temp_file_path = temp_file.name
-
-    # 使用临时文件路径作为视频源进行处理
-    # time.sleep(3)
-    # video_stream = cv2.VideoCapture(temp_file_path)
-    
-    video_stream = cv2.VideoCapture(0)
-    # video_stream.open(''.join(map(chr, bytes_data)))
-    
-    # os.remove(temp_file_path)
-    # cap = cv2.VideoCapture(0)
-    mpHands = mp.solutions.hands
-    hands = mpHands.Hands(static_image_mode=False,
-                          max_num_hands=2,
-                          min_detection_confidence=0.5)
-    mpDraw = mp.solutions.drawing_utils
-    
+def run(bytes_data=None):
+    gesture_detector = GestureRecognition()
+    cap = cv.VideoCapture(0)
+    mode = 0
+    number = -1
     while True:
-        
-        # 读取一帧图像
-        success, img = video_stream.read()
-        if not success:
-            print(2)
-            break
-        image_height, image_width, _ = np.shape(img)
-        print(1)
-        # 转换为RGB
-        imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-        
-        # 得到检测结果
-        left_up_fingers = []
-        results = hands.process(imgRGB)
-        print(3)
-
-        right_up_fingers = []
-
-        if results.multi_hand_landmarks:
-            # for hand in results.multi_hand_landmarks:
-            for idx, hand in enumerate(results.multi_hand_landmarks): 
-                hand_type = results.multi_handedness[idx].classification[0].label 
-                # print(hand_type) # 打印手的类型（左手或右手）
-                
-                # 双手检测
-                # hand = results.multi_hand_landmarks[0]
-                # hand_type = results.multi_handedness[hand].classification[0].label
-                print()
-
-                if hand_type == 'Left':
-                    
-
-                    mpDraw.draw_landmarks(img,hand,mpHands.HAND_CONNECTIONS)
-
-                    # 采集所有关键点的坐标
-                    list_lms = []
-                    for i in range(21):
-                        pos_x = hand.landmark[i].x*image_width
-                        pos_y = hand.landmark[i].y*image_height
-                        list_lms.append([int(pos_x),int(pos_y)])
-
-                    # 构造凸包点
-                    list_lms = np.array(list_lms,dtype=np.int32)
-                    hull_index = [0,1,2,3,6,10,14,19,18,17,10]
-                    hull = cv2.convexHull(list_lms[hull_index,:])
-                    # 绘制凸包
-                    cv2.polylines(img,[hull], True, (0, 255, 0), 2)
-
-                    # 查找外部的点数-指尖的点
-                    n_fig = -1
-                    ll = [4,8,12,16,20]
-                    # print("new"+"2")
-                    
-
-
-                    for i in ll:
-                        pt = (int(list_lms[i][0]),int(list_lms[i][1]))
-                        # 检测点是否在凸包的外面
-                        dist= cv2.pointPolygonTest(hull,pt,True)
-                        if dist <0:
-                            left_up_fingers.append(i)
-
-        
-
-                    for i in ll:
-                        pos_x = hand.landmark[i].x*image_width
-                        pos_y = hand.landmark[i].y*image_height
-                        # 画点
-                        cv2.circle(img, (int(pos_x),int(pos_y)), 3, (0,255,255),-1)
-                    # print("new"+"5")
-
-                    
-                elif hand_type == 'Right':
-                    
-                    
-                    mpDraw.draw_landmarks(img,hand,mpHands.HAND_CONNECTIONS)
-
-                    # 采集所有关键点的坐标
-                    list_lms = []
-                    for i in range(21):
-                        pos_x = hand.landmark[i].x*image_width
-                        pos_y = hand.landmark[i].y*image_height
-                        list_lms.append([int(pos_x),int(pos_y)])
-
-                    # 构造凸包点
-                    list_lms = np.array(list_lms,dtype=np.int32)
-                    hull_index = [0,1,2,3,6,10,14,19,18,17,10]
-                    hull = cv2.convexHull(list_lms[hull_index,:])
-                    # 绘制凸包
-                    cv2.polylines(img,[hull], True, (0, 255, 0), 2)
-
-                    # 查找外部的点数-指尖的点
-                    n_fig = -1
-                    ll = [4,8,12,16,20]
-
-                    for i in ll:
-                        pt = (int(list_lms[i][0]),int(list_lms[i][1]))
-                        # 检测点是否在凸包的外面
-                        dist= cv2.pointPolygonTest(hull,pt,True)
-                        if dist <0:
-                            right_up_fingers.append(i)
-
-                    # print(up_fingers)
-                    # print(list_lms)
-                    # print(np.shape(list_lms))
-                    # 凸包外点的list
-
-    
+        ret, image = cap.read()
+        image = cv.flip(image, 1)  # Mirror display
+        image = cv.cvtColor(image, cv.COLOR_BGR2RGB)
+        show_image, gesture_id = gesture_detector.recognize(image, number, mode)
+        # print(gesture_id)
 
    
+    # video_stream = cv2.VideoCapture(0)
+    # mpHands = mp.solutions.hands
+    # hands = mpHands.Hands(static_image_mode=False,
+    #                       max_num_hands=2,
+    #                       min_detection_confidence=0.5)
+    # mpDraw = mp.solutions.drawing_utils
+    
+    # while True:
+        
+    #     # 读取一帧图像pip
+    #     success, img = video_stream.read()
+    #     if not success:
+    #         print(2)
+    #         break
+    #     image_height, image_width, _ = np.shape(img)
+    #     print(1)
+    #     # 转换为RGB
+    #     imgRGB = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
+        
+    #     # 得到检测结果
+    #     left_up_fingers = []
+    #     results = hands.process(imgRGB)
+    #     print(3)
 
-            str_guester = get_str_guester(left_up_fingers,right_up_fingers,list_lms)
-            # str_guester = 0
+    #     right_up_fingers = []
 
-            return str_guester
+    #     if results.multi_hand_landmarks:
+    #         # for hand in results.multi_hand_landmarks:
+    #         for idx, hand in enumerate(results.multi_hand_landmarks): 
+    #             hand_type = results.multi_handedness[idx].classification[0].label 
+    #             # print(hand_type) # 打印手的类型（左手或右手）
+                
+    #             # 双手检测
+    #             # hand = results.multi_hand_landmarks[0]
+    #             # hand_type = results.multi_handedness[hand].classification[0].label
+    #             print()
 
-    return '1111'
+    #             if hand_type == 'Left':
+                    
+
+    #                 mpDraw.draw_landmarks(img,hand,mpHands.HAND_CONNECTIONS)
+
+    #                 # 采集所有关键点的坐标
+    #                 list_lms = []
+    #                 for i in range(21):
+    #                     pos_x = hand.landmark[i].x*image_width
+    #                     pos_y = hand.landmark[i].y*image_height
+    #                     list_lms.append([int(pos_x),int(pos_y)])
+
+    #                 # 构造凸包点
+    #                 list_lms = np.array(list_lms,dtype=np.int32)
+    #                 hull_index = [0,1,2,3,6,10,14,19,18,17,10]
+    #                 hull = cv2.convexHull(list_lms[hull_index,:])
+    #                 # 绘制凸包
+    #                 cv2.polylines(img,[hull], True, (0, 255, 0), 2)
+
+    #                 # 查找外部的点数-指尖的点
+    #                 n_fig = -1
+    #                 ll = [4,8,12,16,20]
+    #                 # print("new"+"2")
+                    
+
+
+    #                 for i in ll:
+    #                     pt = (int(list_lms[i][0]),int(list_lms[i][1]))
+    #                     # 检测点是否在凸包的外面
+    #                     dist= cv2.pointPolygonTest(hull,pt,True)
+    #                     if dist <0:
+    #                         left_up_fingers.append(i)
+
+        
+
+    #                 for i in ll:
+    #                     pos_x = hand.landmark[i].x*image_width
+    #                     pos_y = hand.landmark[i].y*image_height
+    #                     # 画点
+    #                     cv2.circle(img, (int(pos_x),int(pos_y)), 3, (0,255,255),-1)
+    #                 # print("new"+"5")
+
+                    
+    #             elif hand_type == 'Right':
+                    
+                    
+    #                 mpDraw.draw_landmarks(img,hand,mpHands.HAND_CONNECTIONS)
+
+    #                 # 采集所有关键点的坐标
+    #                 list_lms = []
+    #                 for i in range(21):
+    #                     pos_x = hand.landmark[i].x*image_width
+    #                     pos_y = hand.landmark[i].y*image_height
+    #                     list_lms.append([int(pos_x),int(pos_y)])
+
+    #                 # 构造凸包点
+    #                 list_lms = np.array(list_lms,dtype=np.int32)
+    #                 hull_index = [0,1,2,3,6,10,14,19,18,17,10]
+    #                 hull = cv2.convexHull(list_lms[hull_index,:])
+    #                 # 绘制凸包
+    #                 cv2.polylines(img,[hull], True, (0, 255, 0), 2)
+
+    #                 # 查找外部的点数-指尖的点
+    #                 n_fig = -1
+    #                 ll = [4,8,12,16,20]
+
+    #                 for i in ll:
+    #                     pt = (int(list_lms[i][0]),int(list_lms[i][1]))
+    #                     # 检测点是否在凸包的外面
+    #                     dist= cv2.pointPolygonTest(hull,pt,True)
+    #                     if dist <0:
+    #                         right_up_fingers.append(i)
+
+    #                 # print(up_fingers)
+    #                 # print(list_lms)
+    #                 # print(np.shape(list_lms))
+    #                 # 凸包外点的list
+
+    
+
+    #         str_guester = get_str_guester(left_up_fingers,right_up_fingers,list_lms)
+    #         # str_guester = 0
+
+    #         return str_guester
+
+    # return '1111'

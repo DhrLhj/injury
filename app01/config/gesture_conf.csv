@@ -1,0 +1,8 @@
+index,gesture,enable,win_key
+0,right_up,1,0x26
+1,right_left,1,0x25
+2,right_right,1,0x26
+3,right_down,1,0x28
+4,left_left,0,0x20
+5,scale_out,0,0x20
+6,scale_in,0,0x20
