@@ -306,7 +306,7 @@ class GestureRecognition:
 
 if __name__=='__main__':
     gesture_detector = GestureRecognition()
-    cap = cv.VideoCapture(1)
+    cap = cv.VideoCapture(0)
     mode = 0
     number = -1
     while True:

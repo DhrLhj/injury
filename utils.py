@@ -46,6 +46,27 @@ class FixedSizeQueue:
         self.queue.clear()
 
 
+import pyautogui
+import time
+
+def press_keys_from_string(s: str):
+    """
+    Simulate pressing keys from a given string at the same time.
+
+    Args:
+    - s (str): The string containing keys to be pressed simultaneously.
+
+    Note:
+    This function will press and hold down the keys in the order they appear in the string, 
+    and then release them in the same order.
+    """
+    for char in s:
+        pyautogui.keyDown(char)
+    for char in s:
+        pyautogui.keyUp(char)
+
+
+
 
 def calc_landmark_list( image, landmarks):
         image_width, image_height = image.shape[1], image.shape[0]
