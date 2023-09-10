@@ -9,7 +9,7 @@ import cv2
 import mediapipe as mp
 
 from threading import Thread
-from app01.models.modules import coord_norm 
+from models.modules import coord_norm 
 
 #---------------------------------------------------------------------------
 # 数据获取

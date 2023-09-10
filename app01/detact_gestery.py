@@ -5,14 +5,14 @@ from sklearn.model_selection import train_test_split
 import torch
 import torch.nn as nn
 # from app01.split_train_test import *
-from app01.utils import *
+from utils import *
 import time
 
-from app01.util.dataloader import get_templates, norm_pose
-from app01.config import DynamicGesture as DG
-from app01.models.dtw import dtw
-from app01.models.modules import coord_norm,distance,vDistance,plotgesture,vDistance2
-from app01.gester_encoder import *
+from util.dataloader import get_templates, norm_pose
+from config import DynamicGesture as DG
+from models.dtw import dtw
+from models.modules import coord_norm,distance,vDistance,plotgesture,vDistance2
+from gester_encoder import *
 import math
 
 
@@ -118,13 +118,13 @@ class GestureRecognition:
 
         self.keypoint_classifier =  TransformerModel(d_model=24, nhead=4, num_layers=3, num_classes=14)
         # 加载整个模型
-        self.keypoint_classifier = self.keypoint_classifier.load_model(r'C:\Users\11985\Desktop\ws_demo\ws_demo\app01\best_modelv5.pth').to('cpu')
+        self.keypoint_classifier = self.keypoint_classifier.load_model(r'best_modelv5.pth').to('cpu')
         self.keypoint_classifier.position_enc=self.keypoint_classifier.position_enc.to('cpu')
         self.keypoint_classifier.eval()
         self.frame=-1
         self.left_queue = FixedSizeQueue(60)
         self.right_queue = FixedSizeQueue(60)
-        self.time_gap=15
+        self.time_gap=25
         self.non_gester=1
         self.previous_land_mark=None
         self.current_land_mark=None
@@ -133,7 +133,7 @@ class GestureRecognition:
         self.result_queue.push([-1,-1])
         self.move_flag=0
         # todo: template
-        self.template_dynamic_gesture = get_templates(r"C:\Users\11985\Desktop\0905\ws_demo\ws_demo\ws_demo\app01\gesture_template\0908")[1]
+        self.template_dynamic_gesture = get_templates(r"gesture_template\0908")[1]
         # self.image_holder = FixedSizeQueue(30)
         self.pose_queue = FixedSizeQueue(20)
 
