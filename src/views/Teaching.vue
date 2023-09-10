@@ -112,6 +112,7 @@ export default {
         overlayTextOne:"学习模式",
         overlayTextTwo:"训练模式",
         overlayTextThree:"考核模式",
+        keysPressed: {},
       }
     
 
@@ -134,7 +135,21 @@ export default {
         router.push("/train");
       },bad_bad(){
         router.push("/examine");
-      }
+      },
+
+      handleKeydown(event) {
+        this.keysPressed[event.key] = true;
+        if (this.keysPressed['c'] && this.keysPressed['d']) {
+          this.hh_hh();
+        } else if (this.keysPressed['c'] && this.keysPressed['e']) {
+          this.ii_ii();
+        } else if (this.keysPressed['c'] && this.keysPressed['f']) {
+          this.bad_bad();
+        }
+      },
+      handleKeyup(event) {
+        delete this.keysPressed[event.key];
+      },
     },
     created() 
     {
@@ -158,10 +173,14 @@ export default {
 
     },
     mounted() {
+      document.addEventListener('keydown', this.handleKeydown);
+      document.addEventListener('keyup', this.handleKeyup);
     },
     beforeUnmount() {
       console.log("退出teach")
       this.$ws.removeEventListener('message', this.handleWebSocketMessage);
+      document.removeEventListener('keydown', this.handleKeydown);
+      document.removeEventListener('keyup', this.handleKeyup);
     }
 }
 </script>

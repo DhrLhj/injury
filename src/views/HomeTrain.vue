@@ -14,7 +14,8 @@
                 v-model="dialogVisible"
                 title="Tips：请允许访问摄像头权限进行拍照"
                 width="40%"
-                @close="stopNavigator"
+                @open="startTracking" 
+                @close="stopTracking"
             >
               <div style="width: 90%;margin-left: 10%;">
 
@@ -157,6 +158,14 @@ export default {
   },
   
   methods: {
+    startTracking() {
+      document.addEventListener('keydown', this.handleKeydown);
+      document.addEventListener('keyup', this.handleKeyup);
+    },
+    stopTracking() {
+      document.removeEventListener('keydown', this.handleKeydown);
+      document.removeEventListener('keyup', this.handleKeyup);
+    },
     handleKeydown(event) {
         this.keysPressed[event.key] = true;
         if (this.keysPressed['c'] && this.keysPressed['b']) {//拍摄
