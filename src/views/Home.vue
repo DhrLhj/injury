@@ -72,6 +72,7 @@ export default {
         overlayTextTwo:"急救指南",
         overlayTextThree:"教学模式",
         textmessage:"",
+        keysPressed: {},
       }
     },
     methods:{
@@ -105,11 +106,21 @@ export default {
       shibie(){
         router.push("/body");
       },
-      removeListeners() {
-            // Code to remove your event listeners
-            // For example:
-            this.$ws.removeEventListener('message', this.handleWebSocketMessage);
-        },
+      // removeListeners() {
+      //       // Code to remove your event listeners
+      //       // For example:
+      //       this.$ws.removeEventListener('message', this.handleWebSocketMessage);
+      //   },
+      handleKeydown(event) {
+        this.keysPressed[event.key] = true;
+        if (this.keysPressed['a'] && this.keysPressed['b']) {
+          this.jioaxue();
+        }
+      },
+      handleKeyup(event) {
+        delete this.keysPressed[event.key];
+      },
+
 
     },
     created() {
@@ -139,10 +150,14 @@ export default {
 
     },
     mounted() {
+      document.addEventListener('keydown', this.handleKeydown);
+      document.addEventListener('keyup', this.handleKeyup);
     },
     beforeDestroy() {
       console.log("退出home")
       this.$ws.removeEventListener('message', this.handleWebSocketMessage);
+      document.removeEventListener('keydown', this.handleKeydown);
+      document.removeEventListener('keyup', this.handleKeyup);
     }
 
 }
