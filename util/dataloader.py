@@ -138,10 +138,10 @@ def get_coordinates(file_path):
     从csv文件中 读取坐标文件
     """
     pd_1 = pd.read_csv(open(file_path))
-    arr_coords = pd_1.values.reshape(-1,6,3) #
-    arr_coords_norm = np.array(list(map(norm_pose,arr_coords)))
-    arr_coords_norm = arr_coords_norm[1:] - arr_coords_norm[:-1]
-    return arr_coords, arr_coords_norm
+    arr_coords = pd_1.values.reshape(-1, 6, 3) #
+    arr_coords_norm = np.array(list(map(norm_pose, arr_coords)))
+    arr_coords_diff = arr_coords[1:, :2, :] - arr_coords[:-1, :2, :]
+    return arr_coords_norm, arr_coords_diff
 
 
 def norm_pose(arr_poses):
@@ -157,8 +157,10 @@ def norm_pose(arr_poses):
     入上图所示，分别为右/左的手、肩、胯的(x,y,z)坐标，注意图像镜像过了
     """
     # print(arr_poses.shape)
-    arr_hands_norm = (arr_poses[:2,:]-arr_poses[2:4,:])/\
-        np.expand_dims(np.sqrt(((arr_poses[4:, :]-arr_poses[2:4,:])**2).sum(axis=1)),1).repeat(3,axis=1)
+    distance = np.sqrt(((arr_poses[4:, :]-arr_poses[2:4,:])**2).sum(axis=1))
+    # print(f'Tall: {np.round(distance,2)}')
+    arr_distance = np.expand_dims(distance, 1).repeat(3,axis=1)
+    arr_hands_norm = (arr_poses[:2,:]-arr_poses[2:4,:])/arr_distance
     return arr_hands_norm
 
 
