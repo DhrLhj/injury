@@ -7,6 +7,7 @@ import torch.nn as nn
 from split_train_test import *
 from utils import *
 import time
+import pandas as pd
 
 from util.dataloader import get_templates, norm_pose
 from config import DynamicGesture as DG
@@ -162,12 +163,14 @@ class GestureRecognition:
         self.right_queue = FixedSizeQueue(60)
         self.time_gap=25
         self.non_gester=1
+        self.catch_gester=0
         self.previous_land_mark=None
         self.current_land_mark=None
         self.threshold=0.2
         self.result_queue=FixedSizeQueue(2)
         self.result_queue.push([-1,-1])
         self.move_flag=0
+        self.catch_flag=0
         # todo: template
         self.template_dynamic_gesture = get_templates(r"gesture_template\0908")[1]
         # self.image_holder = FixedSizeQueue(30)
@@ -200,6 +203,7 @@ class GestureRecognition:
             print('mouse move: {delta}')
             mouse_move(*delta.tolist())
 
+    self.lookup = GestureLookup(r'C:\Users\25352\Desktop\map.csv')
 
     def _dynamic_gesture(self,image) -> int:
         # pose estimation
@@ -250,7 +254,7 @@ class GestureRecognition:
         result_hand_sign_id = -1
         ############Detection implementation #############################################################
         image.flags.writeable = False
-        if not self.move_flag:
+        if not self.move_flag and not self.catch_flag:
             results = self.hands.process(image)
             image.flags.writeable = True
             #####################################################################
@@ -313,29 +317,48 @@ class GestureRecognition:
                     right_hand_id = two_hand_result[1] if two_hand_result[1] is not None else None
                     if two_hand_result[1]==self.non_gester or two_hand_result[0]==self.non_gester:
                         res=list(self.result_queue.queue)
-                        print(res)
                         self.move_flag=1
                         for tem in res:
-                            if 1 not in tem:
+                            if self.non_gester not in tem:
                                 self.move_flag=0
                                 break
                         if self.move_flag:
                             print("进入动态")
+                    elif two_hand_result[1]==self.catch_gester:
+                        res=list(self.result_queue.queue)
+                        self.catch_flag=1
+                        for tem in res:
+                            if self.catch_gester not in tem:
+                                self.catch_flag=0
+                                break
+                        if self.catch_flag:
+                            print("进入追踪")
                     else:
                         result_hand_sign_id=encode(left_hand_id,right_hand_id)
                         print(self.frame,'Left:', left_hand, 'Right:', right_hand)
+                        print(result_hand_sign_id)
+                        key=self.lookup.get_gesture_by_id(result_hand_sign_id)
+                        print("key",key)
+                        press_keys_from_string(key)
             else:
                 pass
-        else:
+        if self.move_flag:
             result_hand_sign_id = self._dynamic_gesture(image)
             result_hand_sign_id=encode(dynamic=result_hand_sign_id)
+            key=self.lookup.get_gesture_by_id(result_hand_sign_id)
+            press_keys_from_string(key)
+        elif self.catch_flag:
+            
+            #追踪代码
+            self.catch_flag=0
+            
         show_image = image.copy()
         return show_image, result_hand_sign_id
 
 
 if __name__=='__main__':
     gesture_detector = GestureRecognition()
-    cap = cv.VideoCapture(1)
+    cap = cv.VideoCapture(0)
     mode = 0
     number = -1
     while True:
