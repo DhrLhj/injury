@@ -73,12 +73,12 @@ def press_keys_from_string(s: str):
         return
     s=[tem for tem in s if tem !=' ']
     if s!=[]:
-        pyautogui.keyDown('ctrl')
+        pyautogui.keyDown('tab')
         for char in s:
             pyautogui.keyDown(char)
         for char in s:
             pyautogui.keyUp(char)
-        pyautogui.keyUp('ctrl')
+        pyautogui.keyUp('tab')
         print(s)
 
 def calc_landmark_list( image, landmarks):
