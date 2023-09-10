@@ -171,52 +171,67 @@ export default {
         if (this.keysPressed['c'] && this.keysPressed['b']) {//拍摄
         this.dialogVisible = true;
         this.initCamera()
+        this.keysPressed = {};
         } else if (this.keysPressed['d'] && this.keysPressed['b']) {//拍照
           this.takePhoto();
+          this.keysPressed = {};
         } else if (this.keysPressed['e'] && this.keysPressed['b']) {//提交
           this.dialogVisible = false;
           this.sendPhoto()
+          this.keysPressed = {};
         } else if (this.keysPressed['f'] && this.keysPressed['b']) {//取消拍摄
           this.dialogVisible = false;
           this.stopNavigator();
+          this.keysPressed = {};
         } else if (this.keysPressed['l'] && this.keysPressed['b']) {//方案选择1
           this.clickbutton(0);
+          this.keysPressed = {};
         } else if (this.keysPressed['m'] && this.keysPressed['b']) {//方案选择2
           this.clickbutton(1);
+          this.keysPressed = {};
         } else if (this.keysPressed['n'] && this.keysPressed['b']) {//方案选择3
           this.clickbutton(2);
+          this.keysPressed = {};
         } else if (this.keysPressed['o'] && this.keysPressed['b']) {//2方案选择1
           this.clickbutton1(4);
+          this.keysPressed = {};
         } else if (this.keysPressed['p'] && this.keysPressed['b']) {//3方案选择1
           this.clickbutton1(5);
+          this.keysPressed = {};
         } else if (this.keysPressed['g'] && this.keysPressed['b']) {//载入
           this.uploadFile();
+          this.keysPressed = {};
         } else if (this.keysPressed['h'] && this.keysPressed['b']) {//图片选择下滑          
             this.selectedImageIndex += 1
             if (this.selectedImageIndex > this.images.length - 1) {
               this.selectedImageIndex = this.images.length - 1
             }
             this.selectImage(this.selectedImageIndex);
+            this.keysPressed = {};
           } else if (this.keysPressed['i'] && this.keysPressed['b']) {//图片选择上滑
             this.selectedImageIndex -= 1
             if (this.selectedImageIndex < 0) {
               this.selectedImageIndex = 0
             }
             this.selectImage(this.selectedImageIndex);
+            this.keysPressed = {};
           } else if (this.keysPressed['j'] && this.keysPressed['b']) {//方案选择下滑
             this.boxId += 1
             if (this.boxId > 3) {
               this.boxId = 3
             }
             this.clickBox(this.boxId);
+            this.keysPressed = {};
           } else if (this.keysPressed['k'] && this.keysPressed['b']) {//方案选择上滑
             this.boxId -= 1
             if (this.boxId < 1) {
               this.boxId = 1
             }
             this.clickBox(this.boxId);
+            this.keysPressed = {};
           } else if (this.keysPressed['r'] && this.keysPressed['b']) {//语音播放
             this.speakText();
+            this.keysPressed = {};
           }
           },
 
