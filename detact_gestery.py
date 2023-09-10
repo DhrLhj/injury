@@ -15,6 +15,7 @@ from models.dtw import dtw
 from models.modules import coord_norm,distance,vDistance,plotgesture,vDistance2
 from gester_encoder import *
 import math
+from util.wincontrol import mouse_move
 
 
 class TransformerModel(nn.Module):
@@ -59,8 +60,7 @@ mp_pose = mp.solutions.pose
 name = ['one', 'five', 'fist', 'ok', 'seven', 'two', 'three', 'four', 'six', 'I love you','eight','thumb up','nine','pink']
 
 
-def get_pose_coords(results):
-    specified_landmarks = [16, 15, 12, 11, 24, 23]
+def get_pose_coords(results, specified_landmarks):
     row = None
     if all(results.pose_landmarks.landmark[id].visibility > 0.5 for id in specified_landmarks):
         row = []
@@ -174,7 +174,38 @@ class GestureRecognition:
         self.template_dynamic_gesture = get_templates(r"gesture_template\0908")[1]
         # self.image_holder = FixedSizeQueue(30)
         self.pose_queue = FixedSizeQueue(20)
+        self.mouse_queue = FixedSizeQueue(10)
+        self.mouse_move_temp = np.zeros(3,)
+        self.ema_mouse = 0.0
         self.lookup = GestureLookup(r'map.xlsx')
+
+    def _mouse_move(self, image):
+        results = self.pose.process(image)
+        if results is None:
+            return None
+        if results.pose_landmarks is  None:
+            return None
+        # drawing keypoints
+        mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS)
+        # results parsing
+        specified_landmarks = [16, 15, 12, 11]
+        frame_pose_coords = get_pose_coords(results, specified_landmarks)
+        if frame_pose_coords is None:
+            # print('WARNING: 动态手势未检测到足够多的关键点\n'
+            #       '请确保手、肩、胯在视野内！')
+            # time.sleep(1)
+            return None
+        if self.frame % 4 == 0:
+            self.mouse_queue.push(frame_pose_coords)
+        if self.mouse_queue.full(): 
+            if self.frame % 10 != 0:
+                return None
+            arr_poses = np.array(self.mouse_queue.get_all()).reshape(-1, 4, 3)
+            # 最后一帧和前一帧的相对位移，
+            delta = arr_poses[-1,:2,:2] - arr_poses[0, :2, :2]
+            print(f'mouse move: {delta}')
+            mouse_move(delta[0, 0], delta[0, 1])
+
 
     def _dynamic_gesture(self,image) -> int:
         # pose estimation
@@ -186,7 +217,8 @@ class GestureRecognition:
         # drawing keypoints
         mp_drawing.draw_landmarks(image, results.pose_landmarks, mp_pose.POSE_CONNECTIONS)
         # results parsing
-        frame_pose_coords = get_pose_coords(results)
+        specified_landmarks = [16, 15, 12, 11, 24, 23]
+        frame_pose_coords = get_pose_coords(results, specified_landmarks)
         if frame_pose_coords is None:
             # print('WARNING: 动态手势未检测到足够多的关键点\n'
             #       '请确保手、肩、胯在视野内！')
@@ -225,7 +257,8 @@ class GestureRecognition:
         result_hand_sign_id = -1
         ############Detection implementation #############################################################
         image.flags.writeable = False
-        if not self.move_flag and not self.catch_flag:
+        # if not self.move_flag and not self.catch_flag:
+        if True:
             results = self.hands.process(image)
             image.flags.writeable = True
             #####################################################################
@@ -251,6 +284,7 @@ class GestureRecognition:
                    
                     handness = results.multi_handedness[sorted_indices[hand_idx]].classification[0].label  # This will give either 'Right' or 'Left'
                     mp_drawing.draw_landmarks(image, landmarks, self.mp_hands.HAND_CONNECTIONS)
+
                     landmark_list = calc_landmark_list(image, landmarks)
                         # 由实际像素转换为相对手腕关键点像素坐标并将坐标归一化
                     pre_processed_landmark_list = torch.Tensor(pre_process_landmark(
@@ -265,6 +299,27 @@ class GestureRecognition:
                     else:
                         # print('right')
                         two_hand_result[1]=hand_sign_id
+                        # print('landmarks:', landmarks[0])
+
+
+                        if hand_sign_id == self.catch_gester & self.catch_flag:
+                            # self._mouse_move()
+                            if self.frame % 2 == 0:
+                                arr_landmarks = np.array([[ld.x, ld.y, ld.z] for ld in landmarks.landmark])
+                                # 手部移动所有关键点的均值作为当前手的坐标
+                                arr_mouse_move = arr_landmarks.mean(0)
+                                # ema 平滑
+                                self.mouse_move_temp = (1 - self.ema_mouse) * arr_mouse_move + self.ema_mouse * self.mouse_move_temp
+                                self.mouse_queue.push(self.mouse_move_temp)
+                            if self.mouse_queue.full(): 
+                                arr_poses = np.array(self.mouse_queue.get_all()).reshape(-1, 1, 3)
+                                # 最后一帧和前一帧的相对位移，
+                                delta = arr_poses[-1,:1,:2] - arr_poses[0, :1, :2]
+                                print(f'mouse move: {delta}')
+                                mouse_move(delta[0, 0], delta[0, 1])
+                        else:
+                            self.mouse_queue.clear()
+
                         # print(two_hand_result[1])
                 # print('Left:',name[two_hand_result[0]],'Right',name[two_hand_result[1]])
                 self.left_queue.push(two_hand_result[0])
@@ -272,7 +327,6 @@ class GestureRecognition:
                 # print(two_hand_result)
 
                 if self.frame%self.time_gap==0:
-                    print()
                     two_hand_result[0]=self.left_queue.most_common_in_last_n()[0]
                     if two_hand_result[0] is not None:
                         self.left_queue.clear()
@@ -308,9 +362,9 @@ class GestureRecognition:
                         result_hand_sign_id=encode(left_hand_id,right_hand_id)
                         print(self.frame,'Left:', left_hand, 'Right:', right_hand)
                         print(result_hand_sign_id)
-                        key=self.lookup.get_gesture_by_id(result_hand_sign_id)
-                        print("key",key)
-                        press_keys_from_string(key)
+                        # key=self.lookup.get_gesture_by_id(result_hand_sign_id)
+                        # print("key",key)
+                        # press_keys_from_string(key)
             else:
                 pass
         if self.move_flag:
@@ -318,10 +372,10 @@ class GestureRecognition:
             result_hand_sign_id=encode(dynamic=result_hand_sign_id)
             key=self.lookup.get_gesture_by_id(result_hand_sign_id)
             press_keys_from_string(key)
-        elif self.catch_flag:
-            
-            #追踪代码
-            self.catch_flag=0
+        # elif self.catch_flag:
+        #     # self._mouse_move(image)
+        #     #追踪代码
+        #     self.catch_flag=1
             
         show_image = image.copy()
         return show_image, result_hand_sign_id
