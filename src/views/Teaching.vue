@@ -149,7 +149,7 @@ export default {
             this.hh_hh();
           } else if (message === '0520') { //训练
             this.ii_ii();
-          } else if (message === '0521') {//考核
+          } else if (message === '0521') { //考核
             this.bad_bad();
           }
         }
@@ -159,8 +159,8 @@ export default {
     },
     mounted() {
     },
-    beforeDestroy() {
-      console.log("退出home")
+    beforeUnmount() {
+      console.log("退出teach")
       this.$ws.removeEventListener('message', this.handleWebSocketMessage);
     }
 }

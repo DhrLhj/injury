@@ -10,6 +10,8 @@ const routes = [
     children:[
       { path:'/Teaching',name:'Teaching',component:()=>import('../views/Teaching.vue')},
       { path:'/home',name:'home',component:()=>import('../views/Home.vue')},
+      // { path:'/information',name:'information',component:()=>import('../views/Information.vue')},
+
       { path:'/homeTrain',name:'homeTrain',component:()=>import('../views/HomeTrain.vue')},
       { path:'/train',name:'Train',component:()=>import('../views/Train.vue')},
       { path:'/record',name:'Record',component:()=>import('../components/Record.vue')},
@@ -26,7 +28,7 @@ const routes = [
     name:'studyNew',
     component:()=>import('../views/StudyNew.vue'),
     children:[
-    { path:'/studyNew/right/detail',name:'RightDetail',component:()=>import('../views/StudyVideo/RightDetail.vue')},
+    { path:'/study/right/detail',name:'RightDetail',component:()=>import('../views/StudyVideo/RightDetail.vue')},
     { path:'/study/right/1',name:'RightVideoOne',component:()=>import('../views/StudyVideo/RightVideoOne.vue')},
     { path:'/study/right/2',name:'RightVideoTwo',component:()=>import('../views/StudyVideo/RightVideoTwo.vue')},
     { path:'/study/right/3',name:'RightVideoThree',component:()=>import('../views/StudyVideo/RightVideoThree.vue')},
@@ -53,6 +55,25 @@ const routes = [
     { path:'/detail',name:'Detail',component:()=>import('../views//StudyPhoto/Detail.vue')},
   ]
   },
+  { path:'/personal',
+    name:'Personal',
+    component:()=>import('../views/Personal.vue'),
+    children:[
+      { path:'/information',name:'Information',component:()=>import('../views/Information.vue')},
+      // { path:'/trainingResults',name:'TrainingResults',component:()=>import('../views/TrainingResults.vue')},
+      // { path:'/studySchedule',name:'StudySchedule',component:()=>import('../views/StudySchedule.vue')},
+ 
+    ]
+  },
+  
+  {
+    path: '/left',
+    name: 'left',
+    component: () => import( '../views/Left.vue'),
+    children:[
+      // { path:'/home',name:'Home',component:()=>import('../views/Home.vue')},
+  ]
+},
  
 {
   path:"/webscam",

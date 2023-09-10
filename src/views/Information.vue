@@ -36,6 +36,7 @@
 
 <script>
 
+import router from '@/router/index.js';
 
 
 export default {
@@ -50,13 +51,28 @@ export default {
         },
         
     },
-    created() 
-    {
-        
-        
+    created() {
+      // if (this.$ws.readyState === WebSocket.CLOSED) { this.$ws = new WebSocket('ws://127.0.0.1:8000/room/123/'); }
+      this.handleWebSocketMessage = (event) => {
+        const message = event.data;
+        if (message !== "-1"){
+        console.log('WebSocket消息：', message);
+        this.textmessage = 'WebSocket消息：' + message;
+
+        if (message.includes('03')) {
+            router.push("/home")
+        } 
+      }
+      };
+      this.$ws.addEventListener('message', this.handleWebSocketMessage);
 
     },
     mounted() {
+    },
+    beforeUnmount() {
+      console.log("退出information")
+      this.$ws.removeEventListener('message', this.handleWebSocketMessage);
+      //this.$ws.close()
     }
 
 }
