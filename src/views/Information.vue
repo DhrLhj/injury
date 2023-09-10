@@ -43,6 +43,7 @@ export default {
     name:"Information",
     data(){
         return{
+            keysPressed: {},
         }
     },
     methods: {
