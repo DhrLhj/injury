@@ -65,8 +65,9 @@ def press_keys_from_string(s: str):
     This function will press and hold down the keys in the order they appear in the string, 
     and then release them in the same order.
     """
-    if s =='f5':
-        pyautogui.press('f5')  # 模拟按下F5键
+    key_list=['f5','esc','up','down','left','right']
+    if s in key_list:
+        pyautogui.press(s)  # 模拟按下F5键
         return
     s=[tem for tem in s if tem !=' ']
     if s!=[]
