@@ -14,8 +14,7 @@
                 v-model="dialogVisible"
                 title="Tips：请允许访问摄像头权限进行拍照"
                 width="40%"
-                @open="startTracking" 
-                @close="stopTracking"
+
             >
               <div style="width: 90%;margin-left: 10%;">
 
