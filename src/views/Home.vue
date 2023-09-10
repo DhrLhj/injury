@@ -113,8 +113,16 @@ export default {
       //   },
       handleKeydown(event) {
         this.keysPressed[event.key] = true;
-        if (this.keysPressed['a'] && this.keysPressed['b']) {
+        if (this.keysPressed['a'] && this.keysPressed['d']) {
           this.jioaxue();
+        } else if (this.keysPressed['a'] && this.keysPressed['f']) {
+          this.geren();
+        } else if (this.keysPressed['a'] && this.keysPressed['e']) {
+          this.tongzhi();
+        } else if (this.keysPressed['a'] && this.keysPressed['b']) {
+          this.shangqing();
+        } else if (this.keysPressed['a'] && this.keysPressed['c']) {
+          this.jijiu();
         }
       },
       handleKeyup(event) {

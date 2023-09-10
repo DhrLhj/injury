@@ -151,11 +151,67 @@ export default {
       projectList:[["/study/right/1",'/study/right/burn','/study/right/burnDrug'],['/study/right/2','/study/right/fracture','/study/right/fractureDrug'],['/study/right/3','/study/right/bruise','/study/right/bruiseDrug'],
       ['/study/right/4','/study/right/scratches','/study/right/scratchesDrug'],['/study/right/5','/study/right/gunshot','/study/right/gunshotDrug'],['/study/right/6','/study/right/explosion','/study/right/explosionDrug']],
       selectedImageIndex: -1,
-      output: '' // 初始化一个空字符串来存储输出的文本
+      output: '', // 初始化一个空字符串来存储输出的文本
+      keysPressed: {},
     }
   },
   
   methods: {
+    handleKeydown(event) {
+        this.keysPressed[event.key] = true;
+        if (this.keysPressed['c'] && this.keysPressed['b']) {//拍摄
+        this.dialogVisible = true;
+        this.initCamera()
+        } else if (this.keysPressed['d'] && this.keysPressed['b']) {//拍照
+          this.takePhoto();
+        } else if (this.keysPressed['e'] && this.keysPressed['b']) {//提交
+          this.dialogVisible = false;
+          this.sendPhoto()
+        } else if (this.keysPressed['f'] && this.keysPressed['b']) {//取消拍摄
+          this.dialogVisible = false;
+          this.stopNavigator();
+        } else if (this.keysPressed['l'] && this.keysPressed['b']) {//方案选择1
+          this.clickbutton(0);
+        } else if (this.keysPressed['m'] && this.keysPressed['b']) {//方案选择2
+          this.clickbutton(1);
+        } else if (this.keysPressed['n'] && this.keysPressed['b']) {//方案选择3
+          this.clickbutton(2);
+        } else if (this.keysPressed['o'] && this.keysPressed['b']) {//2方案选择1
+          this.clickbutton1(4);
+        } else if (this.keysPressed['p'] && this.keysPressed['b']) {//3方案选择1
+          this.clickbutton1(5);
+        } else if (this.keysPressed['g'] && this.keysPressed['b']) {//载入
+          this.uploadFile();
+        } else if (this.keysPressed['h'] && this.keysPressed['b']) {//图片选择下滑          
+            this.selectedImageIndex += 1
+            if (this.selectedImageIndex > this.images.length - 1) {
+              this.selectedImageIndex = this.images.length - 1
+            }
+            this.selectImage(this.selectedImageIndex);
+          } else if (this.keysPressed['i'] && this.keysPressed['b']) {//图片选择上滑
+            this.selectedImageIndex -= 1
+            if (this.selectedImageIndex < 0) {
+              this.selectedImageIndex = 0
+            }
+            this.selectImage(this.selectedImageIndex);
+          } else if (this.keysPressed['j'] && this.keysPressed['b']) {//方案选择下滑
+            this.boxId += 1
+            if (this.boxId > 3) {
+              this.boxId = 3
+            }
+            this.clickBox(this.boxId);
+          } else if (this.keysPressed['k'] && this.keysPressed['b']) {//方案选择上滑
+            this.boxId -= 1
+            if (this.boxId < 1) {
+              this.boxId = 1
+            }
+            this.clickBox(this.boxId);
+          } else if (this.keysPressed['r'] && this.keysPressed['b']) {//语音播放
+            this.speakText();
+          }
+          },
+
+
     selectImage(index) {
       this.selectedImageIndex = index;
       this.isPictrue = true;
@@ -446,10 +502,14 @@ export default {
 
   },
   mounted() {
+    document.addEventListener('keydown', this.handleKeydown);
+      document.addEventListener('keyup', this.handleKeyup);
   },
   beforeUnmount() {
     console.log("退出hometrain")
     this.$ws.removeEventListener('message', this.handleWebSocketMessage);
+    document.removeEventListener('keydown', this.handleKeydown);
+      document.removeEventListener('keyup', this.handleKeyup);
   }
 }
 </script>
