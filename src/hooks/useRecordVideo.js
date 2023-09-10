@@ -48,12 +48,14 @@ const WebSocketPlugin = {
         
         ws.onmessage = (e) => {
         // console.log("message:=====",e.data);
-        flag = true
-        ws.send("start recognization");
+        // flag = true
+        
 
-        if (e.data.includes('02')){
-            router.push("/study/right/1")
+        if (e.data==='1024'){
+            console.log('qqq')
+            router.push("/home")
         }
+        ws.send("start recognization");
         //     console.log("进入第二题")
         //     const hash = window.location.hash;
         

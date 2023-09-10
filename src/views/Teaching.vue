@@ -129,7 +129,7 @@ export default {
         console.log("考核模式")
       },
       hh_hh(){
-        router.push("/study/right/1");
+        router.push("/studyNew");
       },ii_ii(){
         router.push("/train");
       },bad_bad(){
@@ -138,23 +138,30 @@ export default {
     },
     created() 
     {
-        this.$ws.addEventListener('message', (event) => {
-        // 处理 WebSocket 消息
-        const message = event.data;
-        console.log('WebSocket消息：', message);
-        
-        if (message === 'hh_hh') {
-            this.hh_hh(); 
-        } else if (message === 'ii_ii') {
-            this.ii_ii();
-        } else if (message === 'bad_bad') {
-            this.bad_bad();
-        }
-        
 
-    })
+      this.handleWebSocketMessage = (event) => {
+        const message = event.data;
+        if (message !== "-1"){
+          console.log('WebSocket消息：', message);
+          this.textmessage = 'WebSocket消息：' + message;
+
+          if (message === '0514') { //学习
+            this.hh_hh();
+          } else if (message === '0520') { //训练
+            this.ii_ii();
+          } else if (message === '0521') { //考核
+            this.bad_bad();
+          }
+        }
+      };
+      this.$ws.addEventListener('message', this.handleWebSocketMessage);
+
     },
     mounted() {
+    },
+    beforeUnmount() {
+      console.log("退出teach")
+      this.$ws.removeEventListener('message', this.handleWebSocketMessage);
     }
 }
 </script>
@@ -171,7 +178,6 @@ export default {
   height: 50%;
 }
 .el-card__body{
-  padding: none;
   border: none;
 }
 .el-row{

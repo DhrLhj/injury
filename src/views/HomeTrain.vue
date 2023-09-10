@@ -87,7 +87,7 @@
           <div id="box1" class="box" @click="clickBox1"  style="background-color: #99a9bf">
             <div style="width: 80px; font-family: bond; text-align: center; font-size: 20px; margin: 0 40px 0 40px">识别结果</div>
             <div style="width: 80px; font-family: bond; text-align: center; font-size: 20px; margin: 0 40px 0 40px">{{80}}%</div>
-            <el-button style="width:180px; font-size: 24px; margin: 0 40px 0 40px" size="big" type="primary" @click="speakText">{{88}}%  推荐方案1</el-button>
+            <el-button style="width:180px; font-size: 24px; margin: 0 40px 0 40px" size="big" type="primary" @click="clickbutton(0)">{{88}}%  推荐方案1</el-button>
             <audio ref="audioElement" @canplaythrough="startPlayback">
               <source src="C:\Users\11985\Desktop\0905\admin-front\admin-front\public\MP3\盛夏-毛不易.320.mp3" type="audio/mpeg">您的浏览器不支持音频播放。
             </audio>
@@ -129,6 +129,7 @@
 <script>
 import {ref} from "vue";
 import {sendPhoto} from "@/api/api";
+import router from '@/router/index.js';
 
 export default {
   
@@ -142,16 +143,13 @@ export default {
       isPictrue: false,
       dialogVisible:ref(false),
       boxId: 0,
-
- 
-      images: [
-        require('@/assets/leftimagebox/1.jpg'),require('@/assets/leftimagebox/2.jpg'),require('@/assets/leftimagebox/3.jpg'),require('@/assets/leftimagebox/4.jpg'),
-      ],
+      images: [require('@/assets/leftimagebox/1.jpg'), require('@/assets/leftimagebox/2.jpg')],
+      imagesId: 2 ,
       images1: [
         require('@/assets/leftimagebox/5.jpg'),require('@/assets/leftimagebox/6.jpg'),require('@/assets/leftimagebox/1.jpg')
       ],
-      projectList:[["study/right/1",'study/right/burn','study/right/burnDrug'],['study/right/2','study/right/fracture','study/right/fractureDrug'],['/study/right/3','study/right/bruise','study/right/bruiseDrug'],
-      ['study/right/4','study/right/scratches','study/right/scratchesDrug'],['study/right/5','study/right/gunshot','study/right/gunshotDrug'],['study/right/6','study/right/explosion','study/right/explosionDrug']],
+      projectList:[["/study/right/1",'/study/right/burn','/study/right/burnDrug'],['/study/right/2','/study/right/fracture','/study/right/fractureDrug'],['/study/right/3','/study/right/bruise','/study/right/bruiseDrug'],
+      ['/study/right/4','/study/right/scratches','/study/right/scratchesDrug'],['/study/right/5','/study/right/gunshot','/study/right/gunshotDrug'],['/study/right/6','/study/right/explosion','/study/right/explosionDrug']],
       selectedImageIndex: -1,
       output: '' // 初始化一个空字符串来存储输出的文本
     }
@@ -226,11 +224,11 @@ export default {
       box1.style.backgroundColor = '#FFFFFF';
       box2.style.backgroundColor = '#FFFFFF';
       box3.style.backgroundColor = '#FFFFFF';
-      if (boxId === 1) {
+      if (boxId === 1 && box1 !== null) {
         box1.style.backgroundColor = '#99a9bf';
-      } else if (boxId === 2) {
+      } else if (boxId === 2 && box2 !== null) {
         box2.style.backgroundColor = '#99a9bf';
-      } else if (boxId === 3) {
+      } else if (boxId === 3 && box3 !== null) {
         box3.style.backgroundColor = '#99a9bf';
       }
       }
@@ -340,7 +338,11 @@ export default {
       // const fileInput = event.target;
       // // 检查是否选择了文件
       // if (fileInput.files[0] === "") {
-        this.images.push(require('@/assets/rightimagebox/1.jpg'));
+      if (this.imagesId < 3){
+        this.images.push(require('@/assets/leftimagebox/3.jpg'));
+        this.imagesId += 1;
+        window.alert("已加载一张图片");
+      }      
       // }else{
       // // 获取选择的文件
       // const file = fileInput.files[0];
@@ -352,20 +354,22 @@ export default {
     },
 
     clickbutton(bu_id){
+      console.log(this.projectList[this.selectedImageIndex][bu_id])
       router.push(this.projectList[this.selectedImageIndex][bu_id] );
     },
 
     clickbutton1(bu_id){
-      router.push(this.projectList[bu_id][0] );
+      console.log(this.projectList[bu_id][0])
+      router.push(this.projectList[bu_id][0]);
     }
 
   },
   created() {
-    console.log(this.$ws.readyState)
-    console.log(WebSocket.CLOSED)
-    if (this.$ws.readyState === WebSocket.CLOSED) { 
-      console.log('ss')
-      this.$ws = new WebSocket('ws://127.0.0.1:8000/room/123/'); }
+    // console.log(this.$ws.readyState)
+    // console.log(WebSocket.CLOSED)
+    // if (this.$ws.readyState === WebSocket.CLOSED) { 
+    //   console.log('ss')
+    //   this.$ws = new WebSocket('ws://127.0.0.1:8000/room/123/'); }
 
     this.handleWebSocketMessage=(event)=> {
       // 处理 WebSocket 消息
@@ -377,38 +381,13 @@ export default {
         this.initCamera()
       } else if (message === '1125') {//拍照
         this.takePhoto();
-      } else if (message.includes('18')) {//提交
+      } else if (message.includes('10000')) {//提交
         this.dialogVisible = false;
         this.sendPhoto()
-      } else if (message === '0114') {//取消拍摄
-        this.jijiu();
-      } else if (message.includes('18')) {//载入
-        this.uploadFile();
-      } else if (message === '30') {//图片选择下滑
-        this.selectedImageIndex += 1
-        if (this.selectedImageIndex < 0) {
-          this.selectedImageIndex = 0
-        }
-        this.selectImage(this.selectedImageIndex);
-      } else if (message === '29') {//图片选择上滑
-        this.selectedImageIndex -= 1
-        if (this.selectedImageIndex > this.images.length - 1) {
-          this.selectedImageIndex = this.images.length - 1
-        }
-        this.selectImage(this.selectedImageIndex);
-      } else if (message.includes('15')) {//方案选择下滑
-        this.boxId += 1
-        if (this.boxId < 1) {
-          this.boxId = 1
-        }
-        this.clickBox(this.boxId);
-      } else if (message.includes('26')) {//方案选择上滑
-        this.boxId -= 1
-        if (this.boxId > 3) {
-          this.boxId = 3
-        }
-        this.clickBox(this.boxId);
-      } else if (message.includes('0115')) {//方案选择1
+      } else if (message === '0115') {//取消拍摄
+        this.dialogVisible = false;
+        this.stopNavigator();
+      } else if (message==='1226') {//方案选择1
         this.clickbutton(0);
       } else if (message.includes('0120')) {//方案选择2
         this.clickbutton(1);
@@ -418,7 +397,33 @@ export default {
         this.clickbutton1(4);
       } else if (message.includes('0715')) {//3方案选择1
         this.clickbutton1(5);
-      } else if (message.includes('22')) {//语音播放
+      } else if (message.includes('18')) {//载入
+        this.uploadFile();
+      } else if (message === '30') {//图片选择下滑
+        this.selectedImageIndex += 1
+        if (this.selectedImageIndex > this.images.length - 1) {
+          this.selectedImageIndex = this.images.length - 1
+        }
+        this.selectImage(this.selectedImageIndex);
+      } else if (message === '29') {//图片选择上滑
+        this.selectedImageIndex -= 1
+        if (this.selectedImageIndex < 0) {
+          this.selectedImageIndex = 0
+        }
+        this.selectImage(this.selectedImageIndex);
+      } else if (message === '15') {//方案选择下滑
+        this.boxId += 1
+        if (this.boxId > 3) {
+          this.boxId = 3
+        }
+        this.clickBox(this.boxId);
+      } else if (message === '26') {//方案选择上滑
+        this.boxId -= 1
+        if (this.boxId < 1) {
+          this.boxId = 1
+        }
+        this.clickBox(this.boxId);
+      } else if (message==='22') {//语音播放
         this.speakText();
       }
       
@@ -436,7 +441,7 @@ export default {
   },
   mounted() {
   },
-  beforeDestroy() {
+  beforeUnmount() {
     console.log("退出hometrain")
     this.$ws.removeEventListener('message', this.handleWebSocketMessage);
   }

@@ -91,7 +91,7 @@ export default {
       } else if (message.includes('29')) {//方案选择上滑
         self.handleChooseNode('1')
         self.handleNotification()
-      } else if (message.includes('31')) {//方案选择左滑
+      } else if (message==='31') {//方案选择左滑
         self.handleChooseNode('7')
         self.handleNotification()
       } else if (message.includes('32')) {//方案选择右滑
@@ -110,7 +110,7 @@ export default {
         self.handleChooseNode('4')
         self.handleNotification()
       } else if (message.includes('19')) {//方案选择 手势7
-        self.onNodeClick(this.currentChooseNodeId)
+        self.onNodeClick()
       }
     }
 
@@ -118,8 +118,8 @@ export default {
     this.$ws.addEventListener('message', this.handleWebSocketMessage);
 
   },
-  beforeDestroy() {
-    console.log("退出hometrain")
+  beforeUnmount() {
+    console.log("退出detail")
     this.$ws.removeEventListener('message', this.handleWebSocketMessage);
   },
   methods: {
@@ -409,7 +409,9 @@ export default {
       })
     },
     // 展示当前选中的节点
-    onNodeClick(node, $event) {
+    onNodeClick($event) {
+      let node = this.$refs.seeksRelationGraph.getNodeById(this.currentChooseNodeId) // 选择当前节点
+
       console.log('选中: ', node.id, node.x, node.y)
       console.log(node.targetNodes)
       // 在节点点击事件处理程序中执行跳转操作
@@ -535,6 +537,7 @@ export default {
     },
     // 处理根据手势选择节点事件
     handleChooseNode(eventId) {
+      console.log(this.currentChooseNodeId)
       let currentNode = this.$refs.seeksRelationGraph.getNodeById(this.currentChooseNodeId)
       let nodes = currentNode.targetNodes
       for (let i = 0; i < nodes.length; i++) {
