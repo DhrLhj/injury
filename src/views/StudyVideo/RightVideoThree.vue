@@ -55,50 +55,51 @@
         data(){
             return{   
                 videourl:"/videos/烧伤救治.mp4",
+                keysPressed: {},
             }
         },
         methods:{
-//     toggleFullScreen() {
-//   const videoPlayer = this.$refs.videoPlayer;
+    toggleFullScreen() {
+  const videoPlayer = this.$refs.videoPlayer;
 
-//   // 检查浏览器是否支持全屏功能
-//   if (document.fullscreenEnabled) {
-//     // 如果不在全屏状态下，请求全屏权限
-//     if (!document.fullscreenElement) {
-//       videoPlayer.requestFullscreen().catch((error) => {
-//         console.error('请求全屏权限失败：', error);
-//       });
-//     } else {
-//       // 如果已经在全屏状态下，退出全屏
-//       this.toExitFullscreen();
-//     }
-//   } else {
-//     console.error('浏览器不支持全屏功能');
-//   }
-// },
-//     toExitFullscreen() {
-//       if (document.fullscreenElement) {
-//         // 如果当前处于全屏状态，则退出全屏
-//         if (document.exitFullscreen) {
-//           document.exitFullscreen();
-//         }
-//       }
-//     },
-//     handleKeydown(event) {
-//         this.keysPressed[event.key] = true;
-//         console.log(this.keysPressed)
-//         // this.$set(this.keysPressed, event.key, true);
-//         if (this.keysPressed['a'] && this.keysPressed['d']) {
-//           this.toggleFullScreen();
-//           this.keysPressed = {};
-//         } else if (this.keysPressed['a'] && this.keysPressed['f']) {
-//           this.toExitFullscreen();
-//           this.keysPressed = {};
-//         }
-//       },
-//       handleKeyup(event) {
-//         delete this.keysPressed[event.key];
-//       },
+  // 检查浏览器是否支持全屏功能
+  if (document.fullscreenEnabled) {
+    // 如果不在全屏状态下，请求全屏权限
+    if (!document.fullscreenElement) {
+      videoPlayer.requestFullscreen().catch((error) => {
+        console.error('请求全屏权限失败：', error);
+      });
+    } else {
+      // 如果已经在全屏状态下，退出全屏
+      this.toExitFullscreen();
+    }
+  } else {
+    console.error('浏览器不支持全屏功能');
+  }
+},
+    toExitFullscreen() {
+      if (document.fullscreenElement) {
+        // 如果当前处于全屏状态，则退出全屏
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    },
+    handleKeydown(event) {
+        this.keysPressed[event.key] = true;
+        console.log(this.keysPressed)
+        // this.$set(this.keysPressed, event.key, true);
+        if (this.keysPressed['a'] && this.keysPressed['d']) {
+          this.toggleFullScreen();
+          this.keysPressed = {};
+        } else if (this.keysPressed['a'] && this.keysPressed['f']) {
+          this.toExitFullscreen();
+          this.keysPressed = {};
+        }
+      },
+      handleKeyup(event) {
+        delete this.keysPressed[event.key];
+      },
   },
   created() {
 
