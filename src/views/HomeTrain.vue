@@ -197,10 +197,12 @@ export default {
           this.dialogVisible = false;
           this.stopNavigator();
           this.keysPressed = {};
-        } else if (this.keysPressed['l'] && this.keysPressed['b']) {//方案选择1
-          this.clickbutton(0);
-          this.keysPressed = {};
-        } else if (this.keysPressed['m'] && this.keysPressed['b']) {//方案选择2
+        } 
+        // else if (this.keysPressed['l'] && this.keysPressed['b']) {//方案选择1
+        //   this.clickbutton(0);
+        //   this.keysPressed = {};
+        // } 
+        else if (this.keysPressed['m'] && this.keysPressed['b']) {//方案选择2
           this.clickbutton(1);
           this.keysPressed = {};
         } else if (this.keysPressed['n'] && this.keysPressed['b']) {//方案选择3
