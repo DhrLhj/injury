@@ -14,8 +14,8 @@ export default function useRecordVideo() {
     });
 
     function handleKeyDown(event) {
-        if (event.key === '9' && event.key === 'm') {
-            console.log('按下了 Enter 键');
+        if (event.key === '9') {
+            console.log('按下了 9 键');
 
         }
     }
