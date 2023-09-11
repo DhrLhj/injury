@@ -6,7 +6,7 @@ export default function useRecordVideo() {
     onMounted(() => {
         setTimeout(() => {
             document.addEventListener('keydown', handleKeyDown);
-        }, 0);
+        }, 10);
     });
 
     onBeforeUnmount(() => {
