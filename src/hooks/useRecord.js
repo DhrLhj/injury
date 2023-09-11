@@ -109,10 +109,10 @@ export default function () {
                     router.push("/Teaching")  
             }else if(resultTextTemp.includes('肢体') && resultTextTemp.includes("动作")){
                     console.log("肢体动作识别----")
-                    document.querySelector('#body').click()
+                    // document.querySelector('#body').click()
             }else if(resultTextTemp.includes('手部') && resultTextTemp.includes("模型")){
                     console.log("手部模型识别----")
-                    document.querySelector('#hand').click()
+                    // document.querySelector('#hand').click()
             
 
 
@@ -130,51 +130,51 @@ export default function () {
             }else if(resultTextTemp.includes('开始') && resultTextTemp.includes("考核")){
                 console.log("开始考核----")
                 // router.push("/ExamineInner")
-                document.querySelector("#ExamineInner").click()
+                // document.querySelector("#ExamineInner").click()
             }else if(resultTextTemp.includes('详情')){
                 console.log("查看详情----")
                 router.push('/detail')
             }else if(resultTextTemp.includes('辨别烧伤')){
                 console.log("辨别烧伤----")
                 // router.push("/study/right/1")
-                document.querySelector('#leftItem1').click()
+                // document.querySelector('#leftItem1').click()
             }else if(resultTextTemp.includes("返回")){
                 router.back()
             }else if(resultTextTemp.includes("烧伤") && resultTextTemp.includes("救治方案")){
                 // router.push("/study/right/burn")
-                document.querySelector('#leftItem2').click()
+                // document.querySelector('#leftItem2').click()
             }else if(resultTextTemp.includes("烧伤") && resultTextTemp.includes("药品")){
                 // router.push("/study/right/burn")
-                document.querySelector('#leftItem13').click()    
+                // document.querySelector('#leftItem13').click()    
 
             }else if(resultTextTemp.includes("辨别骨折")){
                 console.log("辨别骨折----")
                 // router.push("/study/right/2")
-                document.querySelector('#leftItem3').click()
+                // document.querySelector('#leftItem3').click()
             }else if(resultTextTemp.includes("骨折") && resultTextTemp.includes("救治方案")){
                 console.log("骨折救治方案----")
             }else if(resultTextTemp.includes("骨折") && resultTextTemp.includes("药品")){
                 console.log("骨折药品----")
                 // router.push("/study/right/fracture")
-                document.querySelector('#leftItem14').click()
+                // document.querySelector('#leftItem14').click()
 
             }else if(resultTextTemp.includes("辨别撞伤")){
                 console.log("辨别撞伤----")
                 // router.push("/study/right/3")
-                document.querySelector('#leftItem5').click()
+                // document.querySelector('#leftItem5').click()
             }else if(resultTextTemp.includes("撞伤") & resultTextTemp.includes("救治方案")){
                 console.log("撞伤救治方案------")
                 // router.push("/study/right/bruise")
-                document.querySelector('#leftItem6').click()
+                // document.querySelector('#leftItem6').click()
             }else if(resultTextTemp.includes("撞伤") & resultTextTemp.includes("药品")){
                 console.log("撞伤救治方案------")
                 // router.push("/study/right/bruise")
-                document.querySelector('#leftItem15').click()
+                // document.querySelector('#leftItem15').click()
 
             }else if(resultTextTemp.includes("辨别划伤")){
                 console.log("辨别划伤----")
                 // router.push("/study/right/4")
-                document.querySelector('#leftItem7').click()
+                // document.querySelector('#leftItem7').click()
             }else if(resultTextTemp.includes("划伤") & resultTextTemp.includes("救治方案")){
                 console.log("划伤救治方案-----")     
                 // router.push("/study/right/scratches")
@@ -182,157 +182,67 @@ export default function () {
             }else if(resultTextTemp.includes("划伤") & resultTextTemp.includes("药品")){
                 console.log("划伤救治方案-----")
                 // router.push("/study/right/scratches")
-                document.querySelector('#leftItem16').click()
+                // document.querySelector('#leftItem16').click()
 
             }else if(resultTextTemp.includes("辨别枪弹伤")){
                 console.log("辨别枪弹伤----")
                 // router.push("/study/right/5")
-                document.querySelector('#leftItem9').click()
+                // document.querySelector('#leftItem9').click()
             }else if(resultTextTemp.includes("枪弹伤") & resultTextTemp.includes("救治方案")){
                 console.log("枪弹伤救治方案----")
                 // router.push("/study/right/gunshot")
-                document.querySelector('#leftItem10').click()
+                // document.querySelector('#leftItem10').click()
             }else if(resultTextTemp.includes("枪弹伤") & resultTextTemp.includes("药品")){
                 console.log("枪弹伤救治方案----")
                 // router.push("/study/right/gunshot")
-                document.querySelector('#leftItem17').click()
+                // document.querySelector('#leftItem17').click()
 
             }else if(resultTextTemp.includes("辨别炸伤")){
                 console.log("辨别炸伤----")
                 // router.push("/study/right/6")
-                document.querySelector('#leftItem11').click()
+                // document.querySelector('#leftItem11').click()
             }else if(resultTextTemp.includes("炸伤") & resultTextTemp.includes("救治方案")){
                 console.log("炸伤救治方案-----")
                 // router.push("/study/right/explosion")
-                document.querySelector('#leftItem12').click()
+                // document.querySelector('#leftItem12').click()
             }else if(resultTextTemp.includes("炸伤") & resultTextTemp.includes("救治方案")){
                 console.log("炸伤救治方案-----")
                 // router.push("/study/right/explosion")
-                document.querySelector('#leftItem12').click()
+                // document.querySelector('#leftItem12').click()
             }else if(resultTextTemp.includes("炸伤") & resultTextTemp.includes("药品")){
                 console.log("炸伤救治方案-----")
                 // router.push("/study/right/explosion")
-                document.querySelector('#leftItem18').click()
+                // document.querySelector('#leftItem18').click()
             
             }else if(resultTextTemp.includes("推荐") & resultTextTemp.includes("救治")
             & resultTextTemp.includes("方案")){
                 console.log("推荐救治方案-----")
                 // router.push("/study/right/explosion")
-                document.querySelector('#tjjzfa').click()
+                // document.querySelector('#tjjzfa').click()
             
 
             }else if(resultTextTemp.includes("资料")){
                 console.log("个人资料----")
                 // router.push("/information")
-                document.querySelector("#personaldata").click()
+                // document.querySelector("#personaldata").click()
             }else if(resultTextTemp.includes("成绩")&resultTextTemp.includes("训练")){
                 console.log("训练成绩----")
                 // router.push("/trainingResults")
-                document.querySelector("#TrainingResults").click()
+                // document.querySelector("#TrainingResults").click()
             }else if(resultTextTemp.includes("进度") && resultTextTemp.includes("学习")){
                 console.log("学习进度-----")
                 // router.push("/studySchedule")
-                document.querySelector("#studySchedule").click()
+                // document.querySelector("#studySchedule").click()
 
             }else if(resultTextTemp.includes("操作")|| resultTextTemp.includes("视频")){
                 console.log("操作视频-----")
-                document.querySelector('#myButton').click()
-            }else if(resultTextTemp.includes("第一题")|| resultTextTemp.includes("第1题")){
-                console.log("第一题-----")
-                document.querySelector("#index1").click()
-            }else if(resultTextTemp.includes("第二题")|| resultTextTemp.includes("第2题")){
-                console.log("第一题-----")
-                document.querySelector("#index2").click()
-            }else if(resultTextTemp.includes("第三题")|| resultTextTemp.includes("第3题")){
-                console.log("第一题-----")
-                document.querySelector("#index3").click()
-            }else if(resultTextTemp.includes("第四题")|| resultTextTemp.includes("第4题")){
-                console.log("第一题-----")
-                document.querySelector("#index4").click()
-            }else if(resultTextTemp.includes("第五题")|| resultTextTemp.includes("第5题")){
-                console.log("第一题-----")
-                document.querySelector("#index5").click()
-            }else if(resultTextTemp.includes("第六题")|| resultTextTemp.includes("第6题")){
-                console.log("第一题-----")
-                document.querySelector("#index6").click()
-            }else if(resultTextTemp.includes("第七题")|| resultTextTemp.includes("第7题")){
-                console.log("第一题-----")
-                document.querySelector("#index7").click()
-            }else if(resultTextTemp.includes("第八题")|| resultTextTemp.includes("第8题")){
-                console.log("第一题-----")
-                document.querySelector("#index8").click()
-            }else if(resultTextTemp.includes("第九题")|| resultTextTemp.includes("第9题")){
-                console.log("第一题-----")
-                document.querySelector("#index9").click()
-            }else if(resultTextTemp.includes("第十题")|| resultTextTemp.includes("第10题")){
-                console.log("第一题-----")
-                document.querySelector("#index10").click()
-            }else if(resultTextTemp.includes("第十一题")|| resultTextTemp.includes("第11题")){
-                console.log("第一题-----")
-                document.querySelector("#index11").click()
-            }else if(resultTextTemp.includes("第十二题")|| resultTextTemp.includes("第12题")){
-                console.log("第一题-----")
-                document.querySelector("#index12").click()
-            }else if(resultTextTemp.includes("第十三题")|| resultTextTemp.includes("第13题")){
-                console.log("第一题-----")
-                document.querySelector("#index13").click()
-            }else if(resultTextTemp.includes("第十四题")|| resultTextTemp.includes("第14题")){
-                console.log("第一题-----")
-                document.querySelector("#index14").click()
-            }else if(resultTextTemp.includes("第十五题")|| resultTextTemp.includes("第15题")){
-                console.log("第一题-----")
-                document.querySelector("#index15").click()
-            }else if(resultTextTemp.includes("第十六题")|| resultTextTemp.includes("第16题")){
-                console.log("第一题-----")
-                document.querySelector("#index16").click()
-            }else if(resultTextTemp.includes("第十七题")|| resultTextTemp.includes("第17题")){
-                console.log("第一题-----")
-                document.querySelector("#index17").click()
-            }else if(resultTextTemp.includes("第十八题")|| resultTextTemp.includes("第18题")){
-                console.log("第一题-----")
-                document.querySelector("#index18").click()
-            }else if(resultTextTemp.includes("第十九题")|| resultTextTemp.includes("第19题")){
-                console.log("第一题-----")
-                document.querySelector("#index19").click()
-            }else if(resultTextTemp.includes("第二十题")|| resultTextTemp.includes("第20题")){
-                console.log("第一题-----")
-                document.querySelector("#index20").click()
-            }else if(resultTextTemp.includes("第二十一题")|| resultTextTemp.includes("第21题")){
-                console.log("第一题-----")
-                document.querySelector("#index21").click()
-            }else if(resultTextTemp.includes("第二十二题")|| resultTextTemp.includes("第22题")){
-                console.log("第一题-----")
-                document.querySelector("#index22").click()
-            }else if(resultTextTemp.includes("第二十三题")|| resultTextTemp.includes("第23题")){
-                console.log("第一题-----")
-                document.querySelector("#index23").click()
-            }else if(resultTextTemp.includes("第二十四题")|| resultTextTemp.includes("第24题")){
-                console.log("第一题-----")
-                document.querySelector("#index24").click()
-            }else if(resultTextTemp.includes("第二十五题")|| resultTextTemp.includes("第25题")){
-                console.log("第一题-----")
-                document.querySelector("#index25").click()
-            }else if(resultTextTemp.includes("第二十六题")|| resultTextTemp.includes("第26题")){
-                console.log("第一题-----")
-                document.querySelector("#index26").click()
-            }else if(resultTextTemp.includes("第二十七题")|| resultTextTemp.includes("第27题")){
-                console.log("第一题-----")
-                document.querySelector("#index27").click()
-            }else if(resultTextTemp.includes("第二十八题")|| resultTextTemp.includes("第28题")){
-                console.log("第一题-----")
-                document.querySelector("#index28").click()
-            }else if(resultTextTemp.includes("第二十九题")|| resultTextTemp.includes("第29题")){
-                console.log("第一题-----")
-                document.querySelector("#index29").click()
-            }else if(resultTextTemp.includes("第三十题")|| resultTextTemp.includes("第30题")){
-                console.log("第一题-----")
-                document.querySelector("#index30").click()
+                // document.querySelector('#myButton').click()
             }else if(resultTextTemp.includes("这个是")|| resultTextTemp.includes("擦伤")){
                 console.log("判断题-----")
-                document.querySelector("#determine").click()
+                // document.querySelector("#determine").click()
             }else if(resultTextTemp.includes("这道题")|| resultTextTemp.includes("选")){
                 console.log("选择题-----")
-                document.querySelector("#select").click()
+                // document.querySelector("#select").click()
             }
 
 
