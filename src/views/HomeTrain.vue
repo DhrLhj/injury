@@ -346,6 +346,7 @@ export default {
     initCamera() {
       const cameraId = '0'; // 选择1号相机
       // navigator.mediaDevices.getUserMedia({ video: { deviceId: { exact: cameraId } } })
+      console.log(navigator.mediaDevices.enumerateDevices())
       navigator.mediaDevices.getUserMedia({ video: true })
           .then(stream => {
             const videoElement = this.$refs.videoElement;
