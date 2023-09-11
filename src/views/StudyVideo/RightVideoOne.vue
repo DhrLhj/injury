@@ -90,7 +90,31 @@ export default {
           document.exitFullscreen();
         }
       }
-    }
+    },
+    handleKeydown(event) {
+        this.keysPressed[event.key] = true;
+        console.log(this.keysPressed)
+        // this.$set(this.keysPressed, event.key, true);
+        if (this.keysPressed['a'] && this.keysPressed['d']) {
+          this.jioaxue();
+          this.keysPressed = {};
+        } else if (this.keysPressed['a'] && this.keysPressed['f']) {
+          this.geren();
+          this.keysPressed = {};
+        } else if (this.keysPressed['a'] && this.keysPressed['e']) {
+          this.tongzhi();
+          this.keysPressed = {};
+        } else if (this.keysPressed['a'] && this.keysPressed['b']) {
+          this.shangqing();
+          this.keysPressed = {};
+        } else if (this.keysPressed['b'] && this.keysPressed['k']) {
+          this.jijiu();
+          this.keysPressed = {};
+        }
+      },
+      handleKeyup(event) {
+        delete this.keysPressed[event.key];
+      },
   },
   created() {
 
@@ -106,22 +130,21 @@ export default {
         // }
 
       }
-
     };
 
     this.$ws.addEventListener('message', this.handleWebSocketMessage);
 
-
-
-
-
   },
   mounted() {
-  },
-  beforeDestroy() {
-    console.log("退出rightvideoone")
-    this.$ws.removeEventListener('message', this.handleWebSocketMessage);
-  }
+      document.addEventListener('keydown', this.handleKeydown);
+      document.addEventListener('keyup', this.handleKeyup);
+    },
+    beforeUnmount() {
+      console.log("退出home")
+      this.$ws.removeEventListener('message', this.handleWebSocketMessage);
+      document.removeEventListener('keydown', this.handleKeydown);
+      document.removeEventListener('keyup', this.handleKeyup);
+    }
 
 }
 

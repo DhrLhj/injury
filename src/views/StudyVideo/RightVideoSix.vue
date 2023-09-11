@@ -53,12 +53,93 @@
     <script>
     import { ref } from 'vue';
     export default {
-        name:"RightVideoOne",
+        name:"RightVideoSix",
         data(){
             return{   
                 videourl:"/videos/炸伤救治.mp4",
             }
         },
+        methods:{
+    toggleFullScreen() {
+  const videoPlayer = this.$refs.videoPlayer;
+
+  // 检查浏览器是否支持全屏功能
+  if (document.fullscreenEnabled) {
+    // 如果不在全屏状态下，请求全屏权限
+    if (!document.fullscreenElement) {
+      videoPlayer.requestFullscreen().catch((error) => {
+        console.error('请求全屏权限失败：', error);
+      });
+    } else {
+      // 如果已经在全屏状态下，退出全屏
+      this.toExitFullscreen();
+    }
+  } else {
+    console.error('浏览器不支持全屏功能');
+  }
+},
+    toExitFullscreen() {
+      if (document.fullscreenElement) {
+        // 如果当前处于全屏状态，则退出全屏
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        }
+      }
+    },
+    handleKeydown(event) {
+        this.keysPressed[event.key] = true;
+        console.log(this.keysPressed)
+        // this.$set(this.keysPressed, event.key, true);
+        if (this.keysPressed['a'] && this.keysPressed['d']) {
+          this.jioaxue();
+          this.keysPressed = {};
+        } else if (this.keysPressed['a'] && this.keysPressed['f']) {
+          this.geren();
+          this.keysPressed = {};
+        } else if (this.keysPressed['a'] && this.keysPressed['e']) {
+          this.tongzhi();
+          this.keysPressed = {};
+        } else if (this.keysPressed['a'] && this.keysPressed['b']) {
+          this.shangqing();
+          this.keysPressed = {};
+        } else if (this.keysPressed['b'] && this.keysPressed['k']) {
+          this.jijiu();
+          this.keysPressed = {};
+        }
+      },
+      handleKeyup(event) {
+        delete this.keysPressed[event.key];
+      },
+  },
+  created() {
+
+    this.handleWebSocketMessage=(event)=> {
+      // 处理 WebSocket 消息
+      const message = event.data;
+      if (message !== "-1"){
+        // console.log('WebSocket消息：', message);
+        // if (message === '25') {//全屏
+        //   this.toggleFullScreen()
+        // } else if (message === '19') {//退出全屏
+        //   this.toExitFullscreen();
+        // }
+
+      }
+    };
+
+    this.$ws.addEventListener('message', this.handleWebSocketMessage);
+
+  },
+  mounted() {
+      document.addEventListener('keydown', this.handleKeydown);
+      document.addEventListener('keyup', this.handleKeyup);
+    },
+    beforeUnmount() {
+      console.log("退出home")
+      this.$ws.removeEventListener('message', this.handleWebSocketMessage);
+      document.removeEventListener('keydown', this.handleKeydown);
+      document.removeEventListener('keyup', this.handleKeyup);
+    }
        
      }
     
