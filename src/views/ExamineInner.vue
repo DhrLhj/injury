@@ -401,38 +401,38 @@ export default {
         this.msg=this.voiceMsg
         // this.$ws.addEventListener('message', (event) => {
         // 处理 WebSocket 消息
-        const message = event.data;
-        console.log('WebSocket消息：', message);
+        // const message = event.data;
+        // console.log('WebSocket消息：', message);
         
-        if (message === '1') {
-            this.selected(0);
-        } else if (message === '2') {
-            this.selected(1);
-        } else if (message === '3') {
-            this.selected(2);
-        } else if (message === '4') {
-            this.selected(3);
-        } else if (message === '5') {
-            this.selected(4);
-        } else if (message === '6') {
-            this.selected(5);
-        } else if (message === '7') {
-            this.selected(6);
-        } else if (message === '8') {
-            this.selected(7);
-        } else if (message === '9') {
-            this.selected(8);
-        } else if (message === '10') {
-            this.selected(9);
-        } else if (message.includes('向上滑动') && this.isactive >0) {
-            this.selected(this.isactive-1);
-        } else if (message.includes('向下滑动') && this.isactive <9) {
-            this.selected(this.isactive+1);
-        } else if (message === 'gg') {
-            this.playVedio();
-        } 
+        // if (message === '1') {
+        //     this.selected(0);
+        // } else if (message === '2') {
+        //     this.selected(1);
+        // } else if (message === '3') {
+        //     this.selected(2);
+        // } else if (message === '4') {
+        //     this.selected(3);
+        // } else if (message === '5') {
+        //     this.selected(4);
+        // } else if (message === '6') {
+        //     this.selected(5);
+        // } else if (message === '7') {
+        //     this.selected(6);
+        // } else if (message === '8') {
+        //     this.selected(7);
+        // } else if (message === '9') {
+        //     this.selected(8);
+        // } else if (message === '10') {
+        //     this.selected(9);
+        // } else if (message.includes('向上滑动') && this.isactive >0) {
+        //     this.selected(this.isactive-1);
+        // } else if (message.includes('向下滑动') && this.isactive <9) {
+        //     this.selected(this.isactive+1);
+        // } else if (message === 'gg') {
+        //     this.playVedio();
+        // } 
         
-        })
+        // })
         
 
     },

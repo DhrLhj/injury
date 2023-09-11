@@ -16,6 +16,7 @@ export default function useRecordVideo() {
     function handleKeyDown(event) {
         if (event.key === '9') {
             console.log('按下了 9 键');
+            router.push("/home")
 
         }
     }
