@@ -6,7 +6,7 @@ import useRecordVideo from './hooks/useRecordVideo';
 useRecord();
 
 //通过ws传输视频
-// useRecordVideo();
+useRecordVideo();
 </script>
 <template>
   <div id="app">
