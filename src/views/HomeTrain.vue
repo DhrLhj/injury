@@ -329,8 +329,23 @@ export default {
       }
     },
 
+    // initCamera() {
+    //   navigator.mediaDevices.getUserMedia({video: true})
+    //       .then(stream => {
+    //         const videoElement = this.$refs.videoElement;
+    //         videoElement.srcObject = stream;
+    //         this.videoStream = stream;
+    //
+    //         videoElement.play();
+    //       })
+    //       .catch(error => {
+    //         console.error('无法访问摄像头', error);
+    //         this.$message.error("无法访问摄像头")
+    //       });
+    // },
     initCamera() {
-      navigator.mediaDevices.getUserMedia({video: true})
+      const cameraId = '1'; // 选择1号相机
+      navigator.mediaDevices.getUserMedia({ video: { deviceId: { exact: cameraId } } })
           .then(stream => {
             const videoElement = this.$refs.videoElement;
             videoElement.srcObject = stream;
@@ -343,6 +358,7 @@ export default {
             this.$message.error("无法访问摄像头")
           });
     },
+
     takePhoto() {
       const videoElement = this.$refs.videoElement;
       const canvasElement = this.$refs.canvasElement;

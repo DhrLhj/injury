@@ -32,96 +32,10 @@ export default {
       graphInfo: {}, // 知识图谱信息
       center_: {x: -200, y: -100}, // 坐标轴起点
       currentChooseNodeId: "0", // 当前选中的nodeId
-
+      keysPressed: {},
     }
   },
-  mounted() {
-    let self = this
-    // 设置知识图谱并展示
-    this.showSeeksGraph()
-    // setTimeout(function () {
-    //   self.handleChooseNode('6')
-    //   self.handleNotification()
-    // }, 0)
-    // setTimeout(function () {
-    //   self.handleChooseNode('1')
-    //   self.handleNotification()
-    // }, 2000)
-    // setTimeout(function () {
-    //   self.handleChooseNode('5')
-    //   self.handleNotification()
-    // }, 4000)
-    // setTimeout(function () {
-    //   self.handleChooseNode('2')
-    //   self.handleNotification()
-    // }, 6000)
-    // setTimeout(function () {
-    //   self.handleChooseNode('4')
-    //   self.handleNotification()
-    // }, 8000)
-    // setTimeout(function () {
-    //   self.handleChooseNode('3')
-    //   self.handleNotification()
-    // }, 10000)
-    // setTimeout(function () {
-    //   self.handleZoomGraph('10')
-    // }, 0)
-    // setTimeout(function () {
-    //   self.handleZoomGraph('10')
-    // }, 2000)
-    // setTimeout(function () {
-    //   self.handleZoomGraph('10')
-    // }, 4000)
-    // setTimeout(function () {
-    //   self.handleZoomGraph('10')
-    // }, 6000)
-  },
-  created() {
-    let self = this
-    this.handleWebSocketMessage=(event)=> {
-      // 处理 WebSocket 消息
-      const message = event.data;
-      
 
-      if (message !== "-1"){
-      console.log('WebSocket消息：', message);
-      if (message.includes('30')) {//方案选择下滑
-        self.handleChooseNode('5')
-        self.handleNotification()
-      } else if (message.includes('29')) {//方案选择上滑
-        self.handleChooseNode('1')
-        self.handleNotification()
-      } else if (message==='31') {//方案选择左滑
-        self.handleChooseNode('7')
-        self.handleNotification()
-      } else if (message.includes('32')) {//方案选择右滑
-        self.handleChooseNode('3')
-        self.handleNotification()
-      } else if (message.includes('33')) {//方案选择左上滑
-        self.handleChooseNode('8')
-        self.handleNotification()
-      } else if (message.includes('34')) {//方案选择右上滑
-        self.handleChooseNode('2')
-        self.handleNotification()
-      } else if (message.includes('35')) {//方案选择左下滑
-        self.handleChooseNode('6')
-        self.handleNotification()
-      } else if (message.includes('36')) {//方案选择右下滑
-        self.handleChooseNode('4')
-        self.handleNotification()
-      } else if (message.includes('19')) {//方案选择 手势7
-        self.onNodeClick()
-      }
-    }
-
-    };
-    this.$ws.addEventListener('message', this.handleWebSocketMessage);
-
-  },
-  beforeUnmount() {
-    console.log("退出detail")
-    this.$ws.removeEventListener('message', this.handleWebSocketMessage);
-  },
   methods: {
 
 
@@ -606,11 +520,133 @@ export default {
         duration: 20000 // 弹窗持续时间20s
       })
     },
+    handleGraphClick() {
+      // 获取 RelationGraph 组件的引用
+      const graphComponent = this.$refs.seeksRelationGraph;
+
+      // 获取鼠标点击的目标元素
+      const targetElement = graphComponent.$el.querySelector('.node');
+
+      // 创建鼠标点击事件
+      const event = new MouseEvent('click', {
+        bubbles: true, // 是否冒泡
+        cancelable: true, // 是否可取消
+        view: window // 关联的视图对象
+      });
+
+      // 触发鼠标点击事件
+      targetElement.dispatchEvent(event);
+    },
+
+    handleKeydown(event) {
+      this.keysPressed[event.key] = true;
+      if (this.keysPressed['d'] && this.keysPressed['we']) {
+        this.onNodeClick(this.currentChooseNodeId)
+        // this.handleGraphClick()
+        this.keysPressed = {};
+      }
+    },
+    handleKeyup(event) {
+      delete this.keysPressed[event.key];
+    },
 
     },
-    
+
+  mounted() {
+    let self = this
+    // 设置知识图谱并展示
+    this.showSeeksGraph()
+    // setTimeout(function () {
+    //   self.handleChooseNode('6')
+    //   self.handleNotification()
+    // }, 0)
+    // setTimeout(function () {
+    //   self.handleChooseNode('1')
+    //   self.handleNotification()
+    // }, 2000)
+    // setTimeout(function () {
+    //   self.handleChooseNode('5')
+    //   self.handleNotification()
+    // }, 4000)
+    // setTimeout(function () {
+    //   self.handleChooseNode('2')
+    //   self.handleNotification()
+    // }, 6000)
+    // setTimeout(function () {
+    //   self.handleChooseNode('4')
+    //   self.handleNotification()
+    // }, 8000)
+    // setTimeout(function () {
+    //   self.handleChooseNode('3')
+    //   self.handleNotification()
+    // }, 10000)
+    // setTimeout(function () {
+    //   self.handleZoomGraph('10')
+    // }, 0)
+    // setTimeout(function () {
+    //   self.handleZoomGraph('10')
+    // }, 2000)
+    // setTimeout(function () {
+    //   self.handleZoomGraph('10')
+    // }, 4000)
+    // setTimeout(function () {
+    //   self.handleZoomGraph('10')
+    // }, 6000)
+
+    document.addEventListener('keydown', this.handleKeydown);
+    document.addEventListener('keyup', this.handleKeyup);
+  },
+  created() {
+    let self = this
+    this.handleWebSocketMessage=(event)=> {
+      // 处理 WebSocket 消息
+      const message = event.data;
+
+
+      if (message !== "-1"){
+        console.log('WebSocket消息：', message);
+        if (message.includes('30')) {//方案选择下滑
+          self.handleChooseNode('5')
+          self.handleNotification()
+        } else if (message.includes('29')) {//方案选择上滑
+          self.handleChooseNode('1')
+          self.handleNotification()
+        } else if (message==='31') {//方案选择左滑
+          self.handleChooseNode('7')
+          self.handleNotification()
+        } else if (message.includes('32')) {//方案选择右滑
+          self.handleChooseNode('3')
+          self.handleNotification()
+        } else if (message.includes('33')) {//方案选择左上滑
+          self.handleChooseNode('8')
+          self.handleNotification()
+        } else if (message.includes('34')) {//方案选择右上滑
+          self.handleChooseNode('2')
+          self.handleNotification()
+        } else if (message.includes('35')) {//方案选择左下滑
+          self.handleChooseNode('6')
+          self.handleNotification()
+        } else if (message.includes('36')) {//方案选择右下滑
+          self.handleChooseNode('4')
+          self.handleNotification()
+        } else if (message.includes('19')) {//方案选择 手势7
+          self.handleGraphClick()
+        }
+      }
+
+    };
+    this.$ws.addEventListener('message', this.handleWebSocketMessage);
+
+  },
+  beforeUnmount() {
+    console.log("退出detail")
+    this.$ws.removeEventListener('message', this.handleWebSocketMessage);
+    document.removeEventListener('keydown', this.handleKeydown);
+    document.removeEventListener('keyup', this.handleKeyup);
+  },
 
   }
+
 
 </script>
 

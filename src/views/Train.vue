@@ -203,8 +203,8 @@ export default {
             photoUrl: null,
             thisVideo:null,
             isFinished: false,
-			audio: "",
-			recorder: new Record(),
+			      audio: "",
+			      recorder: new Record(),
             videourl:"/videos/划伤救治.mp4",
             imagebox:[
             require('@/assets/imagebox/gunshot/1.jpg'),
@@ -212,6 +212,7 @@ export default {
             require('@/assets/imagebox/bruise/3.jpg'),
             require('@/assets/imagebox/scratches/2.jpg'),
             ],
+            keysPressed: {}
  
         }
     },

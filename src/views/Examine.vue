@@ -27,10 +27,13 @@
 </template>
 
 <script>
+import router from "@/router";
+
 export default {
     name:"Examine",
     data(){
         return{
+          keysPressed:{}
         }
     },
     methods: {
@@ -39,36 +42,51 @@ export default {
         },
         ii(){
           router.push("/Teaching")
+        },
+      handleKeydown(event) {
+        this.keysPressed[event.key] = true;
+        if (this.keysPressed['c'] && this.keysPressed['i']) {//教学
+          router.push("/Teaching");
+          this.keysPressed = {};
+        } else if (this.keysPressed['c'] && this.keysPressed['f']) {//教学
+          router.push("/ExamineInner");
+          this.keysPressed = {};
         }
-
-
-    },
-
-    created() {
-
-      this.handleWebSocketMessage = (event) => {
-        const message = event.data;
-        if (message !== "-1") {
-          console.log('WebSocket消息：', message);
-          this.textmessage = 'WebSocket消息：' + message;
-
-          if (message === '0521') { //进入考核
-            this.hh();
-          } else if (message.includes('07')) { //返回
-            this.ii();
-          }
-        }};
-
-        this.$ws.addEventListener('message', this.handleWebSocketMessage);
-
+      },
+      handleKeyup(event) {
+        delete this.keysPressed[event.key];
+      },
 
     },
-      mounted() {
-    },
-      beforeDestroy() {
-      console.log("退出home")
-      this.$ws.removeEventListener('message', this.handleWebSocketMessage);
-    }
+  created() {
+    // if (this.$ws.readyState === WebSocket.CLOSED) { this.$ws = new WebSocket('ws://127.0.0.1:8000/room/123/'); }
+    this.handleWebSocketMessage = (event) => {
+      const message = event.data;
+      if (message !== "-1") {
+        console.log('WebSocket消息：', message);
+        this.textmessage = 'WebSocket消息：' + message;
+
+        if (message === '0521') { //进入考核
+          this.hh();
+        } else if (message.includes('07')) { //返回
+          this.ii();
+        }
+      }};
+    this.$ws.addEventListener('message', this.handleWebSocketMessage);
+
+  },
+  mounted() {
+    document.addEventListener('keydown', this.handleKeydown);
+    document.addEventListener('keyup', this.handleKeyup);
+  },
+  beforeUnmount() {
+    console.log("退出information")
+    this.$ws.removeEventListener('message', this.handleWebSocketMessage);
+    //this.$ws.close()
+    document.removeEventListener('keydown', this.handleKeydown);
+    document.removeEventListener('keyup', this.handleKeyup);
+  }
+
 
 }
 </script>
