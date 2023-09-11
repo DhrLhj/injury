@@ -20,15 +20,18 @@ export default function useKey() {
         } else if (event.key === 'm' && lastKeyPressed === '9') {
             console.log('先后按下了 9 和 m 键');
             router.push("/home");
-            lastKeyPressed = null;  // 重置状态
+            lastKeyPressed = null;  // 
         } else if (event.key === 'n' && lastKeyPressed === '9') {
             console.log('先后按下了 9 和 n 键');
             router.push("/homeTrain");
-            lastKeyPressed = null;  // 重置状态
+            lastKeyPressed = null;  // 
         } else if (event.key === 'l' && lastKeyPressed === '9') {
             console.log('先后按下了 9 和 l 键');
             router.push("/study/right/detail");
-            lastKeyPressed = null;  // 重置状态
+            lastKeyPressed = null;  // 
+        } else {
+            // 如果按下了其他键，重置状态
+            lastKeyPressed = null;
         }
     }
 
