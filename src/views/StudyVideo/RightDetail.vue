@@ -540,7 +540,7 @@ export default {
 
     handleKeydown(event) {
       this.keysPressed[event.key] = true;
-      if (this.keysPressed['d'] && this.keysPressed['we']) {
+      if (this.keysPressed['d'] && this.keysPressed['e']) {
         this.onNodeClick(this.currentChooseNodeId)
         // this.handleGraphClick()
         this.keysPressed = {};
