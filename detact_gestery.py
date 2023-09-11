@@ -151,11 +151,13 @@ class GestureRecognition:
             min_detection_confidence=self.min_detection_confidence,
             min_tracking_confidence=self.min_tracking_confidence,
         )
-
+        is_cuda_available = torch.cuda.is_available()
+        self.device = torch.device("cuda:0" if is_cuda_available else "cpu")
         self.keypoint_classifier =  TransformerModel(d_model=24, nhead=4, num_layers=3, num_classes=14)
         # 加载整个模型
-        self.keypoint_classifier = self.keypoint_classifier.load_model(r'best_modelv5.pth').to('cpu')
-        self.keypoint_classifier.position_enc=self.keypoint_classifier.position_enc.to('cpu')
+        self.keypoint_classifier = self.keypoint_classifier.load_model(r'best_modelv5.pth').to(self.device)
+        self.keypoint_classifier.position_enc=self.keypoint_classifier.position_enc.to(self.device)
+        
         self.keypoint_classifier.eval()
         self.frame=-1
         self.left_queue = FixedSizeQueue(60)
@@ -288,7 +290,7 @@ class GestureRecognition:
                     landmark_list = calc_landmark_list(image, landmarks)
                         # 由实际像素转换为相对手腕关键点像素坐标并将坐标归一化
                     pre_processed_landmark_list = torch.Tensor(pre_process_landmark(
-                            landmark_list))
+                            landmark_list)).to(self.device)
                     hand_sign_id = self.keypoint_classifier(pre_processed_landmark_list).reshape(14)
                     _, hand_sign_id = torch.max(hand_sign_id.data, 0)
                     
