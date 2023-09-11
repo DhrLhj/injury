@@ -224,7 +224,7 @@ export default {
           }
           this.clickBox(this.boxId);
           this.keysPressed = {};
-        } else if (this.keysPressed['q'] && this.keysPressed['b']) {//语音播放
+        } else if (this.keysPressed['2'] && this.keysPressed['b']) {//语音播放
           this.speakText();
           console.log("aaa")
           this.keysPressed = {};
@@ -344,7 +344,7 @@ export default {
     //       });
     // },
     initCamera() {
-      const cameraId = '0'; // 选择1号相机
+      const cameraId = '1'; // 选择1号相机
       navigator.mediaDevices.getUserMedia({ video: { deviceId: { exact: cameraId } } })
           .then(stream => {
             const videoElement = this.$refs.videoElement;
