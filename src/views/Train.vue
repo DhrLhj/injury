@@ -212,7 +212,7 @@ export default {
             require('@/assets/imagebox/bruise/3.jpg'),
             require('@/assets/imagebox/scratches/2.jpg'),
             ],
-
+ 
         }
     },
     components:{
