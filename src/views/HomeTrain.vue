@@ -8,7 +8,7 @@
           <div class="centered-text">伤情数据加载</div>
           <div class="buttons">
 
-            <el-button style="width:100px; font-size: 20px; margin: 0 20px" size="medium" type="primary" @click="dialogVisible = true; initCamera()">拍摄</el-button>
+            <el-button style="width:100px; font-size: 20px; margin: 0 20px" size="medium" type="primary" id="paishe" @click="dialogVisible = true; initCamera()">拍摄</el-button>
 
             <el-dialog
                 v-model="dialogVisible"
@@ -23,15 +23,15 @@
 
 
 
-                <el-button type="primary" @click="takePhoto()" style="width: 100%;height: 20%;">拍照</el-button>
+                <el-button id="paizhao" type="primary" @click="takePhoto()" style="width: 100%;height: 20%;">拍照</el-button>
                 <canvas style="width: 100%; height: 40vh;"
                         ref="canvasElement"></canvas>
                 <!-- <img :src="photoUrl" v-if="photoUrl" alt="拍摄照片"> -->
               </div>
               <template #footer>
                 <span class="dialog-footer">
-                  <el-button @click="dialogVisible = false; stopNavigator()">取消</el-button>
-                  <el-button type="primary" @click="dialogVisible = false; sendPhoto()">
+                  <el-button id='quxiao' @click="dialogVisible = false; stopNavigator()">取消</el-button>
+                  <el-button id='tijiao' type="primary" @click="dialogVisible = false; sendPhoto()">
                     提交
                   </el-button>
                 </span>
@@ -39,7 +39,7 @@
             </el-dialog>
 
             <el-upload ref="fileInput" action accept=".jpeg, .jpg, .png" :auto-upload="false" :show-file-list="false" :on-change="uploadFile">
-              <el-button style="width:100px; font-size: 20px; margin: 0 20px" size="medium" type="primary" >载入</el-button>
+              <el-button id="zairu" style="width:100px; font-size: 20px; margin: 0 20px" size="medium" type="primary" >载入</el-button>
             </el-upload>
 
 
@@ -88,12 +88,12 @@
           <div id="box1" class="box" @click="clickBox1"  style="background-color: #99a9bf">
             <div style="width: 80px; font-family: bond; text-align: center; font-size: 20px; margin: 0 40px 0 40px">识别结果</div>
             <div style="width: 80px; font-family: bond; text-align: center; font-size: 20px; margin: 0 40px 0 40px">{{80}}%</div>
-            <el-button style="width:180px; font-size: 24px; margin: 0 40px 0 40px" size="big" type="primary" @click="clickbutton(0)">{{88}}%  推荐方案1</el-button>
+            <el-button id='xxx1' style="width:180px; font-size: 24px; margin: 0 40px 0 40px" size="big" type="primary" @click="clickbutton(0)">{{88}}%  推荐方案1</el-button>
             <audio ref="audioElement" @canplaythrough="startPlayback">
               <source src="C:\Users\11985\Desktop\0905\admin-front\admin-front\public\MP3\盛夏-毛不易.320.mp3" type="audio/mpeg">您的浏览器不支持音频播放。
             </audio>
-            <el-button style="width:180px; font-size: 24px; margin: 0 40px 0 40px" size="big" type="primary" @click="downloadData">{{8}}%  推荐方案2</el-button>
-            <el-button style="width:180px; font-size: 24px; margin: 0 40px 0 40px" size="big" type="primary" @click="downloadData">{{4}}%  推荐方案3</el-button>
+            <el-button id='xxx2' style="width:180px; font-size: 24px; margin: 0 40px 0 40px" size="big" type="primary" @click="downloadData">{{8}}%  推荐方案2</el-button>
+            <el-button id='xxx3' style="width:180px; font-size: 24px; margin: 0 40px 0 40px" size="big" type="primary" @click="downloadData">{{4}}%  推荐方案3</el-button>
 
 
 
@@ -104,7 +104,7 @@
             <span style="width: 80px; font-family: bond; text-align: center; font-size: 20px; margin: 0 40px 0 40px;">识别结果</span>
             <span style="width: 80px; font-family: bond; text-align: center; font-size: 20px; margin: 0 40px 0 40px;">{{12}}%</span>
 
-            <el-button style="width: 180px; font-size: 24px; margin: 0 40px;" size="big" type="primary" @click="downloadData">推荐方案</el-button>
+            <el-button id='xxx21' style="width: 180px; font-size: 24px; margin: 0 40px;" size="big" type="primary" @click="downloadData">推荐方案</el-button>
           </div>
 
 
@@ -114,7 +114,7 @@
             <span style="width: 80px; font-family: bond; text-align: center; font-size: 20px; margin: 0 40px 0 40px">{{8}}%</span>
 
 
-            <el-button style="width:180px; font-size: 24px; margin: 0 40px 0 40px" size="big" type="primary" @click="downloadData">推荐方案</el-button>
+            <el-button id='xxx31' style="width:180px; font-size: 24px; margin: 0 40px 0 40px" size="big" type="primary" @click="downloadData">推荐方案</el-button>
             <!-- <el-button style="width:180px; font-size: 24px; margin: 0 40px 0 40px" size="big" type="primary" @click="downloadData">推荐方案2</el-button>
             <el-button style="width:180px; font-size: 24px; margin: 0 40px 0 40px" size="big" type="primary" @click="downloadData">推荐方案3</el-button>-->
 
@@ -343,19 +343,31 @@ export default {
     //         this.$message.error("无法访问摄像头")
     //       });
     // },
-    initCamera() {
-      const cameraId = '2'; // 选择1号相机
-      navigator.mediaDevices.getUserMedia({ video: { deviceId: { exact: cameraId } } })
-          .then(stream => {
-            const videoElement = this.$refs.videoElement;
-            videoElement.srcObject = stream;
-            this.videoStream = stream;
+     initCamera() {
+      let nonDefaultCameraId = null;
 
-            videoElement.play();
+      navigator.mediaDevices.enumerateDevices()
+          .then(devices => {
+              const videoDevices = devices.filter(device => device.kind === 'videoinput');
+              
+              if (videoDevices.length > 1) {
+                  // 假设第一个摄像头是默认摄像头，我们选择第二个
+                  nonDefaultCameraId = videoDevices[1].deviceId;
+
+                  // 使用非默认摄像头
+                  return navigator.mediaDevices.getUserMedia({ video: { deviceId: nonDefaultCameraId } });
+              } else {
+                  // throw new Error("只有一个摄像头可用");
+                  return navigator.mediaDevices.getUserMedia({ video: true });
+              }
+          })
+          .then(stream => {
+              const videoElement = this.$refs.videoElement;
+              videoElement.srcObject = stream;
+              videoElement.play();
           })
           .catch(error => {
-            console.error('无法访问摄像头', error);
-            this.$message.error("无法访问摄像头")
+              console.error("错误:", error);
           });
     },
 
