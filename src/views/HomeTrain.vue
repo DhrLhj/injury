@@ -344,8 +344,9 @@ export default {
     //       });
     // },
     initCamera() {
-      const cameraId = '2'; // 选择1号相机
-      navigator.mediaDevices.getUserMedia({ video: { deviceId: { exact: cameraId } } })
+      const cameraId = '0'; // 选择1号相机
+      // navigator.mediaDevices.getUserMedia({ video: { deviceId: { exact: cameraId } } })
+      navigator.mediaDevices.getUserMedia({ video: true })
           .then(stream => {
             const videoElement = this.$refs.videoElement;
             videoElement.srcObject = stream;
