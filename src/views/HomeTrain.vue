@@ -344,21 +344,47 @@ export default {
     //       });
     // },
     initCamera() {
-      const cameraId = '0'; // 选择1号相机
-      // navigator.mediaDevices.getUserMedia({ video: { deviceId: { exact: cameraId } } })
-      console.log(navigator.mediaDevices.enumerateDevices())
-      navigator.mediaDevices.getUserMedia({ video: true })
-          .then(stream => {
-            const videoElement = this.$refs.videoElement;
-            videoElement.srcObject = stream;
-            this.videoStream = stream;
+      let nonDefaultCameraId = null;
 
-            videoElement.play();
+      navigator.mediaDevices.enumerateDevices()
+          .then(devices => {
+              const videoDevices = devices.filter(device => device.kind === 'videoinput');
+              
+              if (videoDevices.length > 1) {
+                  // 假设第一个摄像头是默认摄像头，我们选择第二个
+                  nonDefaultCameraId = videoDevices[1].deviceId;
+
+                  // 使用非默认摄像头
+                  return navigator.mediaDevices.getUserMedia({ video: { deviceId: nonDefaultCameraId } });
+              } else {
+                  throw new Error("只有一个摄像头可用");
+              }
+          })
+          .then(stream => {
+              const videoElement = document.querySelector("#videoElement");
+              videoElement.srcObject = stream;
+              videoElement.play();
           })
           .catch(error => {
-            console.error('无法访问摄像头', error);
-            this.$message.error("无法访问摄像头")
+              console.error("错误:", error);
           });
+
+
+
+      // const cameraId = '0'; // 选择1号相机
+      // // navigator.mediaDevices.getUserMedia({ video: { deviceId: { exact: cameraId } } })
+      // navigator.mediaDevices.getUserMedia({ video: true })
+      //     .then(stream => {
+      //       const videoElement = this.$refs.videoElement;
+      //       videoElement.srcObject = stream;
+      //       this.videoStream = stream;
+
+      //       videoElement.play();
+      //     })
+      //     .catch(error => {
+      //       console.error('无法访问摄像头', error);
+      //       this.$message.error("无法访问摄像头")
+      //     });
     },
 
     takePhoto() {
