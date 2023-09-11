@@ -1,5 +1,5 @@
 import { onMounted, onBeforeUnmount } from 'vue';
-
+import router from '@/router/index.js';
 export default function useRecordVideo() {
     // ... 其他代码
 
