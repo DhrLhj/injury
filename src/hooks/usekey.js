@@ -29,9 +29,6 @@ export default function useKey() {
             console.log('先后按下了 9 和 l 键');
             router.push("/study/right/detail");
             lastKeyPressed = null;  // 重置状态
-        } else {
-            // 如果按下了其他键，重置状态
-            lastKeyPressed = null;
         }
     }
 
