@@ -170,7 +170,7 @@ export default {
     },
     beforeUnmount() {
       console.log("退出home")
-      this.$ws.removeEventListener('message', this.handleWebSocketMessage);
+      // this.$ws.removeEventListener('message', this.handleWebSocketMessage);
       document.removeEventListener('keydown', this.handleKeydown);
       document.removeEventListener('keyup', this.handleKeyup);
     }

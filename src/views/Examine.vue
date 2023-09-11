@@ -81,7 +81,7 @@ export default {
   },
   beforeUnmount() {
     console.log("退出information")
-    this.$ws.removeEventListener('message', this.handleWebSocketMessage);
+    // this.$ws.removeEventListener('message', this.handleWebSocketMessage);
     //this.$ws.close()
     document.removeEventListener('keydown', this.handleKeydown);
     document.removeEventListener('keyup', this.handleKeyup);
