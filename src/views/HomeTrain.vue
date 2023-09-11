@@ -361,7 +361,7 @@ export default {
               }
           })
           .then(stream => {
-              const videoElement = document.querySelector("#videoElement");
+              const videoElement = this.$refs.videoElement;
               videoElement.srcObject = stream;
               videoElement.play();
           })
