@@ -58,14 +58,13 @@
 
 
 
-
       </div>
       <!--        右侧数据表-->
       <div class="right-content">
         <div class="centered-text">伤情实时识别</div>
         <div class="container" v-if="isPictrue">
             <div class="container1 left-column" >
-              <img :src="images[this.selectedImageIndex]" alt="图片" class="bordered-image"/>
+              <img :src="images[this.selectedImageIndex]" alt="图片" class="bordered-image" :style="imageStyle" @click="toggleZoom2"/>
             </div>
             <div class="image-container right-column" >
 
@@ -137,6 +136,7 @@ export default {
   name:"homeTrain",
   data(){
     return{
+      isZoomed: false,
       // url:"require('@/assets/imagebox/gunshot/1.jpg')"
       videourl:"/videos/骨折识别.mp4",
       videourl1:"././",
@@ -156,8 +156,29 @@ export default {
       keysPressed: {},
     }
   },
+  computed: {
+    imageStyle() {
+      return {
+        transform: this.isZoomed ? 'scale(2)' : 'scale(1)'  // 2 是放大的倍数，可以根据需要进行调整
+      };
+    }
+  },
   
   methods: {
+
+    toggleZoom() {
+      if (this.isZoomed) { //放大
+        this.isZoomed = !this.isZoomed;
+      }
+        
+    },
+
+    toggleZoom2() { //缩小
+      if (!this.isZoomed){
+        this.isZoomed = !this.isZoomed;
+      }
+      
+    },
 
     handleKeydown(event) {
         this.keysPressed[event.key] = true;
@@ -234,7 +255,14 @@ export default {
         } else if (this.keysPressed['s'] && this.keysPressed['b']) {//教学
           router.push("/Teaching");
           this.keysPressed = {};
+        } else if (this.keysPressed['a'] && this.keysPressed['3']) {//放大
+          this.toggleZoom();
+          this.keysPressed = {};
+        } else if (this.keysPressed['n'] && this.keysPressed['8']) {//缩小
+          this.toggleZoom2();
+          this.keysPressed = {};
         }
+
     },
 
     handleKeyup(event) {
@@ -357,7 +385,8 @@ export default {
                   // 使用非默认摄像头
                   return navigator.mediaDevices.getUserMedia({ video: { deviceId: nonDefaultCameraId } });
               } else {
-                  throw new Error("只有一个摄像头可用");
+                  // throw new Error("只有一个摄像头可用");
+                  return navigator.mediaDevices.getUserMedia({ video: true });
               }
           })
           .then(stream => {
