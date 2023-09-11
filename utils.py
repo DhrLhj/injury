@@ -25,21 +25,28 @@ class FixedSizeQueue:
     def clean(self):
         self.queue.clear()
 
+
     def most_common_in_last_n(self, n=30):
-    # 获取最后n个元素
+        # 获取最后n个元素
         last_n_items = list(self.queue)[-n:]
-        last_n_items=[i.item() for i in last_n_items if i is not None]
-        last_five_items=list(self.queue)[-5:]
-        if None in last_five_items:
-            return None,None
+
+        # 检查最后五个元素是否包含None
+        if None in last_n_items[-5:]:
+            return None, None
+
+        # 过滤出有item()方法的非None元素
+        last_n_items = [i.item() for i in last_n_items if i is not None and hasattr(i, 'item')]
+
         # 使用Counter统计元素出现的次数
         count = Counter(last_n_items)
+
         # 获取出现次数最多的元素
         most_common = count.most_common(1)
-        print("times",most_common)
         if most_common and most_common[0][1] > 12:
             return most_common[0]  # Returns (value, count) tuple
+
         return None, None
+
     
        # 清空队列的方法
     def clear(self):
@@ -71,23 +78,17 @@ def press_keys_from_string(s: str):
     and then release them in the same order.
     """
     if not isinstance(s, str):
-       
         return
-    key_list=['f5','esc','up','down','left','right']
+    key_list=['f5','esc','up','down','left','right','enter']
     if s in key_list:
         pyautogui.press(s)  # 模拟按下F5键
         return
-    
     s=[z for z in s if z !=' ']
     if s!=[]:
-        pyautogui.keyDown('crtl')
-        pyautogui.keyDown('home')
         for char in s:
             pyautogui.keyDown(char)
         for char in s:
             pyautogui.keyUp(char)
-        pyautogui.keyUp('crtl')
-        pyautogui.keyUp('home')
         print(s)
 
 def calc_landmark_list( image, landmarks):

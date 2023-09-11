@@ -160,7 +160,7 @@ class GestureRecognition:
         self.frame=-1
         self.left_queue = FixedSizeQueue(60)
         self.right_queue = FixedSizeQueue(60)
-        self.time_gap=25
+        self.time_gap=20
         self.non_gester=23
         self.catch_gester=1
         self.previous_land_mark=None
@@ -316,7 +316,7 @@ class GestureRecognition:
                                 arr_poses = np.array(self.mouse_queue.get_all()).reshape(-1, 1, 3)
                                 # 最后一帧和前一帧的相对位移，
                                 delta = arr_poses[-1,:1,:2] - arr_poses[0, :1, :2]
-                                print(f'mouse move: {delta}')
+                                # print(f'mouse move: {delta}')
                                 mouse_move(delta[0, 0], delta[0, 1])
                         else:
                             self.mouse_queue.clear()
@@ -365,7 +365,7 @@ class GestureRecognition:
                         print(self.frame,'Left:', left_hand, 'Right:', right_hand)
                         print(result_hand_sign_id)
                         key=self.lookup.get_gesture_by_id(result_hand_sign_id)
-                        print("key",key)
+                        # print("key",key)
                         press_keys_from_string(key)
             else:
                 pass
@@ -374,18 +374,14 @@ class GestureRecognition:
             result_hand_sign_id=encode(dynamic=result_hand_sign_id)
             key=self.lookup.get_gesture_by_id(result_hand_sign_id)
             press_keys_from_string(key)
-        # elif self.catch_flag:
-        #     # self._mouse_move(image)
-        #     #追踪代码
-        #     self.catch_flag=1
-            
+      
         show_image = image.copy()
         return show_image, result_hand_sign_id
 
 
 if __name__=='__main__':
     gesture_detector = GestureRecognition()
-    cap = cv.VideoCapture(1)
+    cap = cv.VideoCapture(0)
     mode = 0
     number = -1
     while True:
