@@ -344,7 +344,7 @@ export default {
     //       });
     // },
     initCamera() {
-      const cameraId = '1'; // 选择1号相机
+      const cameraId = '0'; // 选择1号相机
       navigator.mediaDevices.getUserMedia({ video: { deviceId: { exact: cameraId } } })
           .then(stream => {
             const videoElement = this.$refs.videoElement;
