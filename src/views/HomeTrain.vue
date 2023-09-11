@@ -558,7 +558,7 @@ export default {
     };
 
 
-    this.$ws.addEventListener('message', this.handleWebSocketMessage);
+    // this.$ws.addEventListener('message', this.handleWebSocketMessage);
 
 
 

@@ -72,7 +72,7 @@ export default {
           this.ii();
         }
       }};
-    this.$ws.addEventListener('message', this.handleWebSocketMessage);
+    // this.$ws.addEventListener('message', this.handleWebSocketMessage);
 
   },
   mounted() {
