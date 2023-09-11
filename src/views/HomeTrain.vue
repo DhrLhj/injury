@@ -773,7 +773,3 @@ export default {
 }
 
 </style>
-
-
-
-homeTrain
