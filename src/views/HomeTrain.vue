@@ -224,7 +224,7 @@ export default {
           }
           this.clickBox(this.boxId);
           this.keysPressed = {};
-        } else if (this.keysPressed['q'] && this.keysPressed['b']) {//语音播放
+        } else if (this.keysPressed['2'] && this.keysPressed['b']) {//语音播放
           this.speakText();
           console.log("aaa")
           this.keysPressed = {};
