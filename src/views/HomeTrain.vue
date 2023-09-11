@@ -234,6 +234,8 @@ export default {
         } else if (this.keysPressed['s'] && this.keysPressed['b']) {//教学
           router.push("/Teaching");
           this.keysPressed = {};
+        } else {
+          this.keysPressed = {};
         }
     },
 
