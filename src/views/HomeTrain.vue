@@ -68,7 +68,7 @@
             </div>
             <div class="image-container right-column" >
 
-              <div class="slide" v-for="(image, index) in images1" :key="index">
+              <div class="slide" v-for="(image, index) in images1[this.selectedImageIndex]" :key="index">
                 <img :src="image" alt="图片" class="bordered-image"/>
               </div>
 
@@ -81,18 +81,18 @@
         <!-- <div>
           <button @click="speakText">播放语音</button>
         </div> -->
-        <div v-if="isPictrue">
+        <div v-if="isPorject">
 
 
           <div id="box1" class="box" @click="clickBox1"  style="background-color: #99a9bf">
             <div style="width: 80px; font-family: bond; text-align: center; font-size: 20px; margin: 0 40px 0 40px">识别结果</div>
-            <div style="width: 80px; font-family: bond; text-align: center; font-size: 20px; margin: 0 40px 0 40px">{{80}}%</div>
-            <el-button id='xxx1' style="width:180px; font-size: 24px; margin: 0 40px 0 40px" size="big" type="primary" @click="clickbutton(0)">{{88}}%  推荐方案1</el-button>
+            <div style="width: 80px; font-family: bond; text-align: center; font-size: 20px; margin: 0 40px 0 40px">{{projectNum[this.selectedImageIndex][0]}}%</div>
+            <el-button id='xxx1' style="width:180px; font-size: 24px; margin: 0 40px 0 40px" size="big" type="primary" @click="clickbutton(0)">{{projectNum[this.selectedImageIndex][1]}}%  推荐方案1</el-button>
             <audio ref="audioElement" @canplaythrough="startPlayback">
               <source src="C:\Users\11985\Desktop\0905\admin-front\admin-front\public\MP3\盛夏-毛不易.320.mp3" type="audio/mpeg">您的浏览器不支持音频播放。
             </audio>
-            <el-button id='xxx2' style="width:180px; font-size: 24px; margin: 0 40px 0 40px" size="big" type="primary" @click="downloadData">{{8}}%  推荐方案2</el-button>
-            <el-button id='xxx3' style="width:180px; font-size: 24px; margin: 0 40px 0 40px" size="big" type="primary" @click="downloadData">{{4}}%  推荐方案3</el-button>
+            <el-button id='xxx2' style="width:180px; font-size: 24px; margin: 0 40px 0 40px" size="big" type="primary" @click="downloadData">{{projectNum[this.selectedImageIndex][2]}}%  推荐方案2</el-button>
+            <el-button id='xxx3' style="width:180px; font-size: 24px; margin: 0 40px 0 40px" size="big" type="primary" @click="downloadData">{{projectNum[this.selectedImageIndex][3]}}%  推荐方案3</el-button>
 
 
 
@@ -101,7 +101,7 @@
           </div>
           <div id="box2" class="box" @click="clickBox2" >
             <span style="width: 80px; font-family: bond; text-align: center; font-size: 20px; margin: 0 40px 0 40px;">识别结果</span>
-            <span style="width: 80px; font-family: bond; text-align: center; font-size: 20px; margin: 0 40px 0 40px;">{{12}}%</span>
+            <span style="width: 80px; font-family: bond; text-align: center; font-size: 20px; margin: 0 40px 0 40px;">{{projectNum[this.selectedImageIndex][4]}}%</span>
 
             <el-button id='xxx21' style="width: 180px; font-size: 24px; margin: 0 40px;" size="big" type="primary" @click="downloadData">推荐方案</el-button>
           </div>
@@ -110,7 +110,7 @@
 
           <div id="box3" class="box" @click="clickBox3" >
             <span style="width: 80px; font-family: bond; text-align: center; font-size: 20px; margin: 0 40px 0 40px">识别结果</span>
-            <span style="width: 80px; font-family: bond; text-align: center; font-size: 20px; margin: 0 40px 0 40px">{{8}}%</span>
+            <span style="width: 80px; font-family: bond; text-align: center; font-size: 20px; margin: 0 40px 0 40px">{{projectNum[this.selectedImageIndex][5]}}%</span>
 
 
             <el-button id='xxx31' style="width:180px; font-size: 24px; margin: 0 40px 0 40px" size="big" type="primary" @click="downloadData">推荐方案</el-button>
@@ -142,15 +142,24 @@ export default {
       videourl1:"././",
       videoStream: null,
       isPictrue: false,
+      isPorject: false,
       dialogVisible:ref(false),
       boxId: 1,
       images: [require('@/assets/leftimagebox/1.jpg'), require('@/assets/leftimagebox/2.jpg')],
-      imagesId: 2 ,
-      images1: [
-        require('@/assets/leftimagebox/5.jpg'),require('@/assets/leftimagebox/6.jpg'),require('@/assets/leftimagebox/1.jpg')
+      imagesId: 3 ,
+      images1: [[require('@/assets/leftimagebox/1-1.jpg'),require('@/assets/leftimagebox/1-2.jpg')], [require('@/assets/leftimagebox/2-1.jpg'),require('@/assets/leftimagebox/2-2.jpg')],
+        [require('@/assets/leftimagebox/3-1.jpg'),require('@/assets/leftimagebox/3-2.jpg')], [require('@/assets/leftimagebox/4-1.jpg'),require('@/assets/leftimagebox/4-2.jpg')],
+        [require('@/assets/leftimagebox/5-1.jpg'),require('@/assets/leftimagebox/5-2.jpg')], [require('@/assets/leftimagebox/6-1.jpg'),require('@/assets/leftimagebox/6-2.jpg')]
+
       ],
-      projectList:[["/study/right/1",'/study/right/burn','/study/right/burnDrug'],['/study/right/2','/study/right/fracture','/study/right/fractureDrug'],['/study/right/3','/study/right/bruise','/study/right/bruiseDrug'],
-      ['/study/right/4','/study/right/scratches','/study/right/scratchesDrug'],['/study/right/5','/study/right/gunshot','/study/right/gunshotDrug'],['/study/right/6','/study/right/explosion','/study/right/explosionDrug']],
+      projectList:[['/study/right/2','/study/right/fracture','/study/right/fractureDrug'],
+        ['/study/right/4','/study/right/scratches','/study/right/scratchesDrug'],
+        ['/study/right/6','/study/right/explosion','/study/right/explosionDrug'],
+        ["/study/right/1",'/study/right/burn','/study/right/burnDrug'],
+        ['/study/right/3','/study/right/bruise','/study/right/bruiseDrug'],
+        ['/study/right/5','/study/right/gunshot','/study/right/gunshotDrug'],
+      ],
+      projectNum:[[80, 88, 8, 4, 12, 8], [85, 78, 14, 8, 8, 7], [82, 90, 6, 4, 12, 6], [93, 87, 8, 5, 5, 2], [95, 84, 14, 2, 4, 1], [75, 91, 6, 3, 13, 12]],
       selectedImageIndex: -1,
       output: '', // 初始化一个空字符串来存储输出的文本
       keysPressed: {},
@@ -280,11 +289,16 @@ export default {
       document.removeEventListener('keyup', this.handleKeyup);
     },
     selectImage(index) {
+      this.isPorject = false;
+
       this.selectedImageIndex = index;
       this.isPictrue = true;
-      this.boxId = 1
-      this.clickBox(this.boxId);
-      console.log('选择了')
+      setTimeout(() => {
+        this.isPorject = true;
+        this.boxId = 1;
+        this.clickBox(this.boxId);
+        console.log('选择了');
+      }, 800);
 
     },
     selOne() {
@@ -507,8 +521,8 @@ export default {
       // const fileInput = event.target;
       // // 检查是否选择了文件
       // if (fileInput.files[0] === "") {
-      if (this.imagesId < 3){
-        this.images.push(require('@/assets/leftimagebox/3.jpg'));
+      if (this.imagesId < 7){
+        this.images.push(require('@/assets/leftimagebox/'+ this.imagesId +'.jpg'));
         this.imagesId += 1;
         window.alert("已加载一张图片");
         setTimeout(() => {

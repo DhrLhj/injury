@@ -9,7 +9,7 @@
           <div class="image" 
             @mouseenter="showOverlayOne=true"
             @mouseleave="showOverlayOne=false" style="height: 100%;width: 100%;" >
-          <img :src="require('@/assets/icon/home1.jpg')" id="img1" alt="" style="height: 100%;width: 100%;" />
+          <img :src="require('@/assets/icon/xuexi.jpg')" id="img1" alt="" style="height: 100%;width: 100%;" />
           <div class="overlay" v-if="showOverlayOne">
             <span class="overlay-text">{{ overlayTextOne }}</span>
           </div> 
@@ -26,7 +26,7 @@
           <div class="image"
             @mouseenter="showOverlayTwo=true"
             @mouseleave="showOverlayTwo=false" style="height: 100%;width: 100%;" >
-          <img :src="require('@/assets/icon/home2.jpg')" alt="" style="height: 100%;width: 100%;" />
+          <img :src="require('@/assets/icon/xunlian.jpg')" alt="" style="height: 100%;width: 100%;" />
           <div class="overlay" v-if="showOverlayTwo">
             <span class="overlay-text">{{ overlayTextTwo }}</span>
           </div>  
@@ -44,7 +44,7 @@
           <div class="image" 
             @mouseenter="showOverlayThree=true"
             @mouseleave="showOverlayThree=false" style="height: 100%;width: 100%;" >
-          <img :src="require('@/assets/icon/home3.jpg')" alt="" style="height: 100%;width: 100%;" />
+          <img :src="require('@/assets/icon/kaohe.jpg')" alt="" style="height: 100%;width: 100%;" />
           <div class="overlay" v-if="showOverlayThree">
             <span class="overlay-text">{{ overlayTextThree }}</span>
           </div>  
