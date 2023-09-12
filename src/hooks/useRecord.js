@@ -89,7 +89,12 @@ export default function () {
                     });
                 });
             });
-            
+
+
+
+            resultTextTemp = resultTextTemp.replace('，','')
+            resultTextTemp = resultTextTemp.replace('。','')
+            resultTextTemp = resultTextTemp.replace('？','')
             console.log("最终结果 -> ",resultTextTemp);
             // 页面跳转
             if(resultTextTemp.includes("中心")){
