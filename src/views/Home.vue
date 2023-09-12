@@ -103,9 +103,6 @@ export default {
       jioaxue(){
         router.push("/Teaching");
       },
-      shibie(){
-        router.push("/body");
-      },
       // removeListeners() {
       //       // Code to remove your event listeners
       //       // For example:
@@ -156,8 +153,6 @@ export default {
           this.jijiu();
         } else if (message.includes('23')) {
           this.jioaxue();
-        } else if (message.includes('0303')) {
-          this.shibie();
         }
       }
       };

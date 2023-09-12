@@ -100,9 +100,6 @@ export default function () {
             }else if(resultTextTemp.includes('教学模式')&& resultTextTemp.includes("模式")){
                 console.log("教学模式----")
                 router.push("/Teaching") 
-            }else if(resultTextTemp.includes('识别') || resultTextTemp=='验证'){
-                console.log("识别验证----")
-                router.push('/body')
             }else if(resultTextTemp.includes('首页') || resultTextTemp=='系统'){
                 console.log("首页----")
                 router.push('/')

@@ -28,9 +28,9 @@
         <el-menu-item to="/change" index='1'>缩放</el-menu-item>
         </router-link> -->
         
-        <router-link to="/body" style="margin-left: 6.3%;">
+        <!-- <router-link to="/body" style="margin-left: 6.3%;">
         <el-menu-item to="/body" index='1'>识别验证</el-menu-item>
-        </router-link>
+        </router-link> -->
         
         <router-link to="/notice" style="margin-left: 4.8%;">
         <el-menu-item ref="mybtton" id="system" index="2" >系&#8198;统&#8198;通&#8198;知</el-menu-item>
