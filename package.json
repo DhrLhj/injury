@@ -15,6 +15,7 @@
     "less-loader": "^7.3.0",
     "relation-graph": "^2.0.27",
     "socket.io-client": "^4.7.2",
+    "sweetalert2": "^11.7.27",
     "v-viewer": "^1.6.4",
     "video.js": "^7.1.0",
     "videojs-contrib-hls": "^5.15.0",

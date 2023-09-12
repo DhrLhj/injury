@@ -17,6 +17,7 @@ import router from '@/router/index.js';
 import {ref, h} from 'vue';
 import RelationGraph from 'relation-graph/vue3'
 import {ElNotification} from "element-plus";
+import Swal from 'sweetalert2';
 
 export default {
   name: "RightDetail",
@@ -331,7 +332,11 @@ export default {
       // 在节点点击事件处理程序中执行跳转操作
       if (node.id === "s1") {
     // 如果节点的 id 为 "s1"，弹出提示框
-       window.alert("在战场环境下，士兵可能被烧伤，按照救援难度分为三个等级：等级1、等级2、等级3，选择子节点进入不同等级的烧伤救治方案。");
+       Swal.fire({
+            title: '"在战场环境下，士兵可能被烧伤，按照救援难度分为三个等级：等级1、等级2、等级3，选择子节点进入不同等级的烧伤救治方案。"',
+            timer: 2000, // 2秒后自动关闭
+            showConfirmButton: false
+          });
       //  $("#imageModal").dialog({
       //   modal: true,
       //   width: "auto",
@@ -340,7 +345,12 @@ export default {
     }
     if (node.id === "s2") {
     // 如果节点的 id 为 "s1"，弹出提示框
-       window.alert("在战场环境下，士兵可能会骨折，按照救援难度分为三个等级：等级1、等级2、等级3，选择子节点进入不同等级的骨折救治方案。");
+      //  window.alert("在战场环境下，士兵可能会骨折，按照救援难度分为三个等级：等级1、等级2、等级3，选择子节点进入不同等级的骨折救治方案。");
+       Swal.fire({
+            title: '"在战场环境下，士兵可能被骨折，按照救援难度分为三个等级：等级1、等级2、等级3，选择子节点进入不同等级的烧伤救治方案。"',
+            timer: 2000, // 2秒后自动关闭
+            showConfirmButton: false
+          });
       //  $("#imageModal").dialog({
       //   modal: true,
       //   width: "auto",
@@ -349,7 +359,12 @@ export default {
     }
     if (node.id === "s3") {
     // 如果节点的 id 为 "s1"，弹出提示框
-       window.alert("在战场环境下，士兵可能被撞伤，按照救援难度分为三个等级：等级1、等级2、等级3，选择子节点进入不同等级的撞伤救治方案。");
+      //  window.alert("在战场环境下，士兵可能被撞伤，按照救援难度分为三个等级：等级1、等级2、等级3，选择子节点进入不同等级的撞伤救治方案。");
+       Swal.fire({
+            title: '"在战场环境下，士兵可能被撞伤，按照救援难度分为三个等级：等级1、等级2、等级3，选择子节点进入不同等级的烧伤救治方案。"',
+            timer: 2000, // 2秒后自动关闭
+            showConfirmButton: false
+          });
       //  $("#imageModal").dialog({
       //   modal: true,
       //   width: "auto",
@@ -357,7 +372,12 @@ export default {
       // })
     }if (node.id === "s4") {
     // 如果节点的 id 为 "s1"，弹出提示框
-       window.alert("在战场环境下，士兵可能被划伤，按照救援难度分为三个等级：等级1、等级2、等级3，选择子节点进入不同等级的划伤救治方案。");
+      //  window.alert("在战场环境下，士兵可能被划伤，按照救援难度分为三个等级：等级1、等级2、等级3，选择子节点进入不同等级的划伤救治方案。");
+       Swal.fire({
+            title: '"在战场环境下，士兵可能被划伤，按照救援难度分为三个等级：等级1、等级2、等级3，选择子节点进入不同等级的烧伤救治方案。"',
+            timer: 2000, // 2秒后自动关闭
+            showConfirmButton: false
+          });
       //  $("#imageModal").dialog({
       //   modal: true,
       //   width: "auto",
@@ -365,7 +385,12 @@ export default {
       // })
     }if (node.id === "s5") {
     // 如果节点的 id 为 "s1"，弹出提示框
-       window.alert("在战场环境下，士兵可能会中弹，按照救援难度分为三个等级：等级1、等级2、等级3，选择子节点进入不同等级的枪弹伤救治方案。");
+      //  window.alert("在战场环境下，士兵可能会中弹，按照救援难度分为三个等级：等级1、等级2、等级3，选择子节点进入不同等级的枪弹伤救治方案。");
+       Swal.fire({
+            title: '"在战场环境下，士兵可能被中弹，按照救援难度分为三个等级：等级1、等级2、等级3，选择子节点进入不同等级的烧伤救治方案。"',
+            timer: 2000, // 2秒后自动关闭
+            showConfirmButton: false
+          });
       //  $("#imageModal").dialog({
       //   modal: true,
       //   width: "auto",
@@ -374,7 +399,12 @@ export default {
     }
     if (node.id === "s6") {
     // 如果节点的 id 为 "s1"，弹出提示框
-       window.alert("在战场环境下，士兵可能被炸伤，按照救援难度分为三个等级：等级1、等级2、等级3，选择子节点进入不同等级的炸伤救治方案。");
+      //  window.alert("在战场环境下，士兵可能被炸伤，按照救援难度分为三个等级：等级1、等级2、等级3，选择子节点进入不同等级的炸伤救治方案。");
+       Swal.fire({
+            title: '"在战场环境下，士兵可能被炸伤，按照救援难度分为三个等级：等级1、等级2、等级3，选择子节点进入不同等级的烧伤救治方案。"',
+            timer: 2000, // 2秒后自动关闭
+            showConfirmButton: false
+          });
       //  $("#imageModal").dialog({
       //   modal: true,
       //   width: "auto",

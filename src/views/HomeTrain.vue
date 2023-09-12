@@ -130,6 +130,8 @@
 import {ref} from "vue";
 import {sendPhoto} from "@/api/api";
 import router from '@/router/index.js';
+import Swal from 'sweetalert2';
+
 
 export default {
   
@@ -207,10 +209,10 @@ export default {
           this.stopNavigator();
           this.keysPressed = {};
         } 
-        // else if (this.keysPressed['l'] && this.keysPressed['b']) {//方案选择1
-        //   this.clickbutton(0);
-        //   this.keysPressed = {};
-        // } 
+        else if (this.keysPressed['l'] && this.keysPressed['b'] && this.selectedImageIndex > 0) {//方案选择1
+          this.clickbutton(0);
+          this.keysPressed = {};
+        } 
         else if (this.keysPressed['m'] && this.keysPressed['b']) {//方案选择2
           this.clickbutton(1);
           this.keysPressed = {};
@@ -517,22 +519,41 @@ export default {
       }
     },
 
+
+      // ...
+
+      uploadFile() {
+        if (this.imagesId < 7) {
+          this.images.push(require('@/assets/leftimagebox/' + this.imagesId + '.jpg'));
+          this.imagesId += 1;
+
+          
+        }
+      },
+
+
     uploadFile() {
       // const fileInput = event.target;
       // // 检查是否选择了文件
       // if (fileInput.files[0] === "") {
-      if (this.imagesId < 7){
+      if (this.imagesId < 20){
         this.images.push(require('@/assets/leftimagebox/'+ this.imagesId +'.jpg'));
         this.imagesId += 1;
-        window.alert("已加载一张图片");
-        setTimeout(() => {
-          // 自动确认弹窗
-          const alertBox = document.querySelector('.alert');
-          console.log(alertBox)
-          if (alertBox) {
-            alertBox.click();
-          }
-        }, 2000); // 延迟2秒后自动确认
+
+        Swal.fire({
+            title: '已加载一张图片',
+            timer: 2000, // 2秒后自动关闭
+            showConfirmButton: false
+          });
+        // window.alert("已加载一张图片");
+        // setTimeout(() => {
+        //   // 自动确认弹窗
+        //   const alertBox = document.querySelector('.alert');
+        //   console.log(alertBox)
+        //   if (alertBox) {
+        //     alertBox.click();
+        //   }
+        // }, 2); // 延迟2秒后自动确认
       }      
       // }else{
       // // 获取选择的文件
