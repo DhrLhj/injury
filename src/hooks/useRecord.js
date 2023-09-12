@@ -436,10 +436,10 @@ export default function () {
             // }else if(resultTextTemp.includes("第三十题")|| resultTextTemp.includes("第30题")){
             //     console.log("第一题-----")
             //     document.querySelector("#index30").click()
-            }else if(resultTextTemp.includes("这个是")|| resultTextTemp.includes("擦伤")){
+            }else if(resultTextTemp.includes("这个是") && resultTextTemp.includes("擦伤")){
                 console.log("判断题-----")
                 document.querySelector("#determine").click()
-            }else if(resultTextTemp.includes("这道题")|| resultTextTemp.includes("选")){
+            }else if(resultTextTemp.includes("这道题")&& resultTextTemp.includes("选")){
                 console.log("选择题-----")
                 document.querySelector("#select").click()
             }
