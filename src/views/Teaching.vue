@@ -61,9 +61,9 @@
 
 
 
-      <b style="margin-left: 2%;font-size: 3vh;color: #036eff;">热门易错伤情</b>
+      <!-- <b style="margin-left: 2%;font-size: 3vh;color: #036eff;">热门易错伤情</b> -->
     </el-row>
-    <el-row style="margin-top: 2%;margin-left: 2%;height: 40%;">
+    <!-- <el-row style="margin-top: 2%;margin-left: 2%;height: 40%;">
       <el-col :span="7" style="height: 100%;width: 100%;">
         <el-card style="height: 100%;margin-left: 5%;">
           <div style="height: 100%;margin-top: -7px;">
@@ -97,7 +97,7 @@
           </div>
         </el-card>
       </el-col>
-    </el-row>
+    </el-row> -->
   </div>
 </template>
 
