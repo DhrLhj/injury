@@ -200,7 +200,7 @@ export default {
         } else if (this.keysPressed['d'] && this.keysPressed['b']) {//拍照
           this.takePhoto();
           this.keysPressed = {};
-        } else if (this.keysPressed['e'] && this.keysPressed['b']) {//提交
+        } else if (this.keysPressed['e'] && this.keysPressed['d']) {//提交
           this.dialogVisible = false;
           this.sendPhoto()
           this.keysPressed = {};
@@ -209,7 +209,7 @@ export default {
           this.stopNavigator();
           this.keysPressed = {};
         } 
-        else if (this.keysPressed['l'] && this.keysPressed['b'] && this.selectedImageIndex > 0) {//方案选择1
+        else if (this.keysPressed['l'] && this.keysPressed['b'] && this.selectedImageIndex >= 0) {//方案选择1
           this.clickbutton(0);
           this.keysPressed = {};
         } 
