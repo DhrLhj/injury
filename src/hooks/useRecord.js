@@ -125,11 +125,12 @@ export default function () {
                 console.log("首页----")
                 router.push('/')
                  
-            }else if(resultTextTemp.includes('载入') ){
-                    console.log("载入图片----")
-                    document.querySelector('#zairu').click()
-                    clickElement('#zairu')
             }
+            // else if(resultTextTemp==='载入图片') {
+            //         console.log("载入图片----")
+            //         // document.querySelector('#zairu').click()
+            //         clickElement('#zairu')
+            // }
             else if(resultTextTemp.includes('打开')&& resultTextTemp.includes("拍摄")){
                     console.log("拍照进行识别")
                     // document.querySelector('#paishe').click()      
@@ -171,50 +172,14 @@ export default function () {
                     // router.push("/study/right/1")
                     // document.querySelector('#xxx31').click()
                     clickElement('#xxx31') 
-            
-
-            } else if (resultTextTemp==='载入') {
-                console.log("载入图片----")
-                document.querySelector('#zairu').click()
-            } else if (resultTextTemp==='打开拍摄') {
-                console.log("拍照进行识别")
-                document.querySelector('#paishe').click()
-            } else if (resultTextTemp==='拍照') {
-                console.log("拍照进行识别")
-                document.querySelector('#paizhao').click()
-            } else if (resultTextTemp==='取消拍摄') {
-                console.log("取消拍摄")
-                document.querySelector('#quxiao').click()
-            } else if (resultTextTemp.includes('提交')) {
-                console.log("提交照片")
-                document.querySelector('#tijiao').click()
-            } else if (resultTextTemp==='第一级救治方案一') {
-                console.log("辨别烧伤----")
-                // router.push("/study/right/1")
-                document.querySelector('#xxx1').click()
-            } else if (resultTextTemp.includes('第一级') && resultTextTemp.includes('救治方案二')) {
-                console.log("辨别烧伤----")
-                // router.push("/study/right/1")
-                document.querySelector('#xxx2').click()
-            } else if (resultTextTemp.includes('第一级') && resultTextTemp.includes('救治方案三')) {
-                console.log("辨别烧伤----")
-                // router.push("/study/right/1")
-                document.querySelector('#xxx3').click()
-            } else if (resultTextTemp.includes('第二级') && resultTextTemp.includes('救治方案')) {
-                console.log("辨别烧伤----")
-                // router.push("/study/right/1")
-                document.querySelector('#xxx21').click()
-            } else if (resultTextTemp.includes('第三级') && resultTextTemp.includes('救治方案')) {
-                console.log("辨别烧伤----")
-                // router.push("/study/right/1")
-                document.querySelector('#xxx31').click()
+        
 
 
             } else if (resultTextTemp==='进入学习模式') {
                 console.log("学习模式----")
                 router.push("/study/right/1")
                 // document.getElementById("img1").click()
-            } else if (resultTextTemp.includes('做题模式')) {
+            } else if (resultTextTemp.includes('训练模式')) {
                 console.log("做题模式----")
                 router.push("/train")
             } else if (resultTextTemp.includes('考核模式')) {
@@ -307,6 +272,9 @@ export default function () {
                 // router.push("/study/right/1")
                 // document.querySelector('#leftItem5').click()
                 clickElement('#leftItem5') 
+            } else if (resultTextTemp === '识别伤情图片'){
+                clickElement('#tu') 
+            
 
 
 

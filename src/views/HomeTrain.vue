@@ -50,7 +50,7 @@
           <div class="centered-text">伤情数据记录</div>
           <div class="image-container" >
             <div class="slide" :class="{ 'selected': selectedImageIndex === index }" v-for="(image, index) in images" :key="index" >
-              <img :src="image" alt="图片" class="bordered-image" @click="selectImage(index)" />
+              <img id = 'tu' :src="image" alt="图片" class="bordered-image" @click="selectImage(index)" />
             </div>
 
           </div>
@@ -522,14 +522,14 @@ export default {
 
       // ...
 
-      uploadFile() {
-        if (this.imagesId < 7) {
-          this.images.push(require('@/assets/leftimagebox/' + this.imagesId + '.jpg'));
-          this.imagesId += 1;
+      // uploadFile() {
+      //   if (this.imagesId < 7) {
+      //     this.images.push(require('@/assets/leftimagebox/' + this.imagesId + '.jpg'));
+      //     this.imagesId += 1;
 
           
-        }
-      },
+      //   }
+      // },
 
 
     uploadFile() {
